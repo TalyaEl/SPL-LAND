@@ -8,7 +8,7 @@ enum class FacilityCategory;
 enum class ActionStatus{
     COMPLETED, ERROR
 };
-cout << "test"
+
 class BaseAction{
     public:
         BaseAction();
