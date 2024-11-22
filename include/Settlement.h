@@ -14,11 +14,11 @@ enum class SettlementType {
 
 class Settlement {
     public:
-        Settlement(const string &name, SettlementType type);
-        const string &getName() const;
-        SettlementType getType() const;
-        const string toString() const;
-
+        Settlement(const string &name, SettlementType type);// builder created
+        const string &getName() const;//func created
+        SettlementType getType() const;// func created
+        const string toString() const;//func created
+//destructor created
         private:
             const string name;
             SettlementType type;

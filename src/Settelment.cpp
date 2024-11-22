@@ -1,9 +1,10 @@
 #include "Settelment.h"
 Settlement(const string &name, SettlementType type)
 : const string name =&name, SettlementType =type
-{
-
-};
+{};
+~Settelment(){
+    delete type;
+}
 const string &getName() const{
     return this.&name
 }:
