@@ -19,12 +19,13 @@ enum class FacilityCategory {
 class FacilityType {
     public:
         FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-        const string &getName() const;
-        int getCost() const;
-        int getLifeQualityScore() const;
-        int getEnvironmentScore() const;
-        int getEconomyScore() const;
-        FacilityCategory getCategory() const;
+        //builder created
+        const string &getName() const; //v
+        int getCost() const;//v
+        int getLifeQualityScore() const;//v
+        int getEnvironmentScore() const;//v
+        int getEconomyScore() const;//v
+        FacilityCategory getCategory() const;//v
 
     protected:
         const string name;
@@ -41,7 +42,7 @@ class Facility: public FacilityType {
 
     public:
         Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-        Facility(FacilityType &type, const string &settlementName);
+        Facility(FacilityType &type, const string &settlementName);//what is the difference of both builders???
         const string &getSettlementName() const;
         const int getTimeLeft() const;
         FacilityStatus step();
