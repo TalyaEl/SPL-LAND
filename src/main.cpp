@@ -13,6 +13,7 @@ int main(int argc, char** argv){
     string configurationFile = argv[1];
     Simulation simulation(configurationFile);
     simulation.start();
+    //add print the line "The simulation has started" in the cpp of start function
     if(backup!=nullptr){
     	delete backup;
     	backup = nullptr;
