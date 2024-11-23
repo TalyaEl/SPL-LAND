@@ -60,7 +60,5 @@ class Facility {
         const FacilityStatus& getStatus() const{
             return _status;
         }
-        const string toString() const{
-
-        }
+        
 };
