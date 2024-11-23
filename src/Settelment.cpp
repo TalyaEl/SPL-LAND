@@ -1,4 +1,4 @@
-#include "Settelment.h"
+#include "Settlement.h"
 Settlement(const string &name, SettlementType type)
 : const string name =&name, SettlementType =type
 {}
