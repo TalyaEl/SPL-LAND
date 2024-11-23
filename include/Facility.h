@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <array>
 using std::string;
 using std::vector;
 
@@ -34,6 +35,7 @@ class FacilityType {
         const int lifeQuality_score;
         const int economy_score;
         const int environment_score;
+        const int score[3]; //added feild
 };
 
 
@@ -52,6 +54,6 @@ class Facility: public FacilityType {
 
     private:
         const string settlementName;
-        FacilityStatus status;
+        FacilityStatus _status;//added underscore
         int timeLeft;
 };
