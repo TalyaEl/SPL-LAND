@@ -9,7 +9,6 @@ using std::vector;
 
 class BaseAction;
 class SelectionPolicy;
-
 class Simulation {
     public:
         Simulation(const string &configFilePath);
