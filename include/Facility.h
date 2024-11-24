@@ -54,6 +54,6 @@ class Facility: public FacilityType {
 
     private:
         const string settlementName;
-        FacilityStatus _status;//added underscore
+        FacilityStatus status;
         int timeLeft;
 };
