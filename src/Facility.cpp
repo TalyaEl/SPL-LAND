@@ -1,7 +1,12 @@
 #include "Facility.h"
 using namespace std;
 
-
+string facilityStatusToString(FacilityStatus t){
+    if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)
+        return "VILLAGE";
+    if (t == FacilityStatus:: OPERATIONAL)
+        return "CITY"  ;
+}
 // FacilityType:
         FacilityType::FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score):
         name(name), category(category), price(price), lifeQuality_score(lifeQuality_score), economy_score(economy_score), environment_score(environment_score),score({lifeQuality_score,economy_score,environment_score})
@@ -28,7 +33,17 @@ using namespace std;
         //Facility:
 
         Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
-        :{}
+        : settlementName(settlementName),
+          status(FacilityStatus::OPERATIONAL),
+          timeLeft(0),  
+          FacilityType(name, category, price,lifeQuality_score,economy_score ,environment_score)
+        {}
+        Facility::Facility(const FacilityType &type, const string &settlementName)
+        : settlementName(settlementName),
+          status(FacilityStatus::OPERATIONAL),
+          timeLeft(0), 
+          FacilityType(type) 
+        {}
         const string &Facility::getSettlementName() const{
             return  settlementName;
         }
@@ -39,10 +54,12 @@ using namespace std;
             timeLeft--;
         }
         void Facility::setStatus(FacilityStatus status){
-           _status=status;
+           status=status;
         }
         const FacilityStatus& Facility::getStatus() const{
-            return _status;
+            return status;
         }
-        
+        const string Facility::toString() const{
+            return getName()+", "+facilityStatusToString(status);
+        }
 
