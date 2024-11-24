@@ -27,8 +27,8 @@ using namespace std;
 
         //Facility:
 
-        Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-
+        Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
+        :{}
         const string &Facility::getSettlementName() const{
             return  settlementName;
         }
