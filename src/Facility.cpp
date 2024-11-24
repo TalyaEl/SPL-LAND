@@ -3,9 +3,9 @@ using namespace std;
 
 string facilityStatusToString(FacilityStatus t){
     if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)
-        return "VILLAGE";
+        return "UNDER_CONSTRUCTIONS";
     if (t == FacilityStatus:: OPERATIONAL)
-        return "CITY"  ;
+        return "OPERATIONAL"  ;
 }
 // FacilityType:
         FacilityType::FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score):
@@ -33,16 +33,17 @@ string facilityStatusToString(FacilityStatus t){
         //Facility:
 
         Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
-        : settlementName(settlementName),
+        : FacilityType(name, category, price,lifeQuality_score,economy_score ,environment_score),
+          settlementName(settlementName),
           status(FacilityStatus::OPERATIONAL),
-          timeLeft(0),  
-          FacilityType(name, category, price,lifeQuality_score,economy_score ,environment_score)
+          timeLeft(0)
         {}
         Facility::Facility(const FacilityType &type, const string &settlementName)
-        : settlementName(settlementName),
+        : FacilityType(type),
+          settlementName(settlementName),
           status(FacilityStatus::OPERATIONAL),
-          timeLeft(0), 
-          FacilityType(type) 
+          timeLeft(0)
+           
         {}
         const string &Facility::getSettlementName() const{
             return  settlementName;
