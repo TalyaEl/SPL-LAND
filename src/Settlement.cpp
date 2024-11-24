@@ -13,22 +13,16 @@ string SettlementTypeToString(SettlementType t){
         return "METROPOLIS";
     
 }
-class Settlement{
-private:
-        const string name;
-        SettlementType type;
 
-public:
-    Settlement(const string &name , SettlementType type)
+    Settlement::Settlement(const string &name , SettlementType type)
         :name(name), type(type){}
 
-    const string &getName() const{
+    const  string &Settlement::getName() const{
         return name;
 }
-    SettlementType getType() const{
+    SettlementType Settlement::getType() const{
          return type;
 }
-    const string toString() const{
+    const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
 }
-};

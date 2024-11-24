@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <array>
 using std::string;
 using std::vector;
 
@@ -34,6 +35,7 @@ class FacilityType {
         const int lifeQuality_score;
         const int economy_score;
         const int environment_score;
+        const int score[3]; //added feild
 };
 
 
@@ -43,11 +45,11 @@ class Facility: public FacilityType {
     public:
         Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
         Facility(const FacilityType &type, const string &settlementName);//what is the difference of both builders???
-        const string &getSettlementName() const;
-        const int getTimeLeft() const;
-        FacilityStatus step();
-        void setStatus(FacilityStatus status);
-        const FacilityStatus& getStatus() const;
+        const string &getSettlementName() const;//v
+        const int getTimeLeft() const;//v
+        FacilityStatus step();//v
+        void setStatus(FacilityStatus status);//v
+        const FacilityStatus& getStatus() const;//v
         const string toString() const;
 
     private:
