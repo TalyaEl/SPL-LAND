@@ -6,6 +6,7 @@
 using std::vector;
 
 NaiveSelection::NaiveSelection(): lastSelectedIndex(-1) {}
+
 const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& facilitiesOptions){
     if (facilitiesOptions.empty()) {
         throw std::out_of_range("The list is empty");
@@ -18,3 +19,11 @@ const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& f
     }
     return facilitiesOptions[lastSelectedIndex];
 } ;  
+
+const string NaiveSelection::toString() const {
+
+}
+
+NaiveSelection* NaiveSelection::*clone() const {
+
+}
