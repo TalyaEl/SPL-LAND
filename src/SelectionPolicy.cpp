@@ -1,11 +1,10 @@
 #include "SelectionPolicy.h"
 #include <string>
 #include <iostream>
-// #include <sstream>
+#include <algorithm>
 
 using std::vector;
 using std::string;
-// using std::stringstream;
 
 //Naive Selection
 NaiveSelection::NaiveSelection(): lastSelectedIndex(-1) {}
@@ -19,14 +18,6 @@ const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& f
 } ;  
 
 const string NaiveSelection::toString() const {
-    // stringstream ss;
-    // if (lastSelectedIndex == -1) {
-    //     ss << "Naive Selection, No facility has been chosen yet.";
-    // }
-    // else {
-    //     ss << "Naive Selection, last selected index is:"+lastSelectedIndex;
-    // }
-    //return ss.str(); does we need to delete this object?
     return "Naive Selection";
 }
 
@@ -39,7 +30,14 @@ BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int
 LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
 
 const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
+    if (facilitiesOptions.empty()) {
+        throw std::out_of_range("The list is empty");
+    }
+    // int min = ;
+    // for (const FacilityType& type : facilitiesOptions) {
 
+    // }
+    // auto minDif = std::min_element(facilitiesOptions.begin(), facilitiesOptions.end(), )
 }
 
 const string BalancedSelection::toString() const {

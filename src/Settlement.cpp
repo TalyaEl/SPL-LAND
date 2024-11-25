@@ -5,7 +5,7 @@
 using std::string;
 using std::vector;
 
-string SettlementTypeToString(SettlementType type){
+string SettlementTypeToString(SettlementType type){ //helper
     switch (type) {
         case SettlementType:: VILLAGE:
             return "VILLAGE";
@@ -13,6 +13,8 @@ string SettlementTypeToString(SettlementType type){
             return "CITY";
         case SettlementType:: METROPOLIS:
             return "METROPOLIS";
+        default:
+            return "UNKNOWN";
     }
 }
 

@@ -30,8 +30,8 @@ int  FacilityType::getEconomyScore() const{
 FacilityCategory  FacilityType::getCategory() const{
     return category;
 }
-//Facility:
 
+//Facility:
 Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
 : FacilityType(name, category, price,lifeQuality_score,economy_score ,environment_score),
   settlementName(settlementName),
@@ -50,7 +50,7 @@ const string &Facility::getSettlementName() const{
 const int Facility::getTimeLeft() const{
     return timeLeft;
 }
-FacilityStatus Facility::step(){//not sure this is correct
+FacilityStatus Facility::step(){
     timeLeft--;
     if (getTimeLeft() == 0)
         return FacilityStatus::OPERATIONAL;

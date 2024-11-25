@@ -43,7 +43,7 @@ class Facility: public FacilityType {
 
     public:
         Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-        Facility(const FacilityType &type, const string &settlementName);//what is the difference of both builders???
+        Facility(const FacilityType &type, const string &settlementName);
         const string &getSettlementName() const;//v
         const int getTimeLeft() const;//v
         FacilityStatus step();//v
