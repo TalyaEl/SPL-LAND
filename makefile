@@ -8,7 +8,7 @@ compile:
 	g++ -g -Wall -Weffc++ -c -o bin/main.o src/main.cpp -Iinclude
 sett:
 	g++ -g -Wall -Weffc++ -c -o bin/Settlement.o src/Settlement.cpp -Iinclude
-	g++ -o Settlement -o bin/Settlement.o
+	g++ -o Settlement bin/Settlement.o
 sim:
 	g++ -g -Wall -Weffc++ -c -o bin/Simulation.o src/Simulation.cpp -Iinclude
 fact:

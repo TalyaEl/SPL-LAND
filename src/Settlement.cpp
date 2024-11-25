@@ -11,9 +11,11 @@ string SettlementTypeToString(SettlementType t){
         return "CITY"  ;
     if (t == SettlementType:: METROPOLIS)
         return "METROPOLIS";
+    else
+        return "Shouldn't be here :(";
 }
 
-    Settlement::Settlement(const string &name , SettlementType type)
+Settlement::Settlement(const string &name , SettlementType type)
         :name(name), type(type){}
 
     const  string &Settlement::getName() const{
@@ -24,4 +26,9 @@ string SettlementTypeToString(SettlementType t){
 }
     const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
+}
+
+int main(){
+    std::cout << "hello\n";
+    return 0;
 }

@@ -31,7 +31,7 @@ const string NaiveSelection::toString() const {
     return "Naive Selection";
 }
 
-NaiveSelection* NaiveSelection::clone() const {
+NaiveSelection* NaiveSelection::clone() const override {
     return new NaiveSelection(*this);
 }
 
