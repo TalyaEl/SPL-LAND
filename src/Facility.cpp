@@ -37,13 +37,13 @@ string facilityStatusToString(FacilityStatus t){
         : FacilityType(name, category, price,lifeQuality_score,economy_score ,environment_score),
           settlementName(settlementName),
           status(FacilityStatus::OPERATIONAL),
-          timeLeft(0)
+          timeLeft(price)
         {}
         Facility::Facility(const FacilityType &type, const string &settlementName)
         : FacilityType(type),
           settlementName(settlementName),
           status(FacilityStatus::OPERATIONAL),
-          timeLeft(0)
+          timeLeft(type.getCost())
            
         {}
         const string &Facility::getSettlementName() const{
@@ -64,4 +64,6 @@ string facilityStatusToString(FacilityStatus t){
         const string Facility::toString() const{
             return getName()+", "+facilityStatusToString(status);
         }
+     
+
 
