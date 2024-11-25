@@ -28,7 +28,7 @@ const string NaiveSelection::toString() const {
     //     ss << "Naive Selection, last selected index is:"+lastSelectedIndex;
     // }
     //return ss.str(); does we need to delete this object?
-    std::cout << "Naive Selection";
+    return "Naive Selection";
 }
 
 NaiveSelection* NaiveSelection::clone() const {
@@ -36,6 +36,20 @@ NaiveSelection* NaiveSelection::clone() const {
 }
 
 //Balanced Selection
+BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore):
+LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
+
+const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
+    
+}
+
+const string BalancedSelection::toString() const {
+    return "Balanced Selection";
+}
+
+BalancedSelection* BalancedSelection::clone() const {
+    return new BalancedSelection(*this);
+}
 
 //Economy Selection
 EconomySelection::EconomySelection(): lastSelectedIndex(-1) {}
@@ -56,7 +70,7 @@ const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>&
 }
 
 const string EconomySelection::toString() const {
-    std::cout << "Economy Selection";
+    return "Economy Selection";
 }
 
 EconomySelection* EconomySelection::clone() const {
@@ -64,4 +78,28 @@ EconomySelection* EconomySelection::clone() const {
 }
 
 //Sustainability Selection
-SustainabilitySelection();
+SustainabilitySelection::SustainabilitySelection(): lastSelectedIndex(-1) {}
+
+const FacilityType& SustainabilitySelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
+        if (facilitiesOptions.empty()) {
+        throw std::out_of_range("The list is empty");
+    }
+    int startIndex = lastSelectedIndex;
+    lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
+    while (facilitiesOptions[lastSelectedIndex].getCategory() != FacilityCategory::ENVIRONMENT){
+        if (lastSelectedIndex == startIndex) {
+            throw std::runtime_error("No facility of environment category found.");
+        }
+        lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
+    }
+    return facilitiesOptions[lastSelectedIndex];
+}
+
+const string SustainabilitySelection::toString() const {
+    return "Sustainability Selection";
+}
+
+SustainabilitySelection* SustainabilitySelection::clone() const {
+    return new SustainabilitySelection(*this);
+}
+
