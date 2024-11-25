@@ -14,7 +14,7 @@ string PlanStatusToString(PlanStatus t){
 }
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions)
 :plan_id(planId),
-settlement(&settlement),//why doesnt it allow &&&
+settlement(&settlement),
 selectionPolicy(selectionPolicy),
 status(PlanStatus::AVALIABLE),
 facilityOptions(facilityOptions),//check this
@@ -31,19 +31,19 @@ const int Plan::getEconomyScore() const{
 const int Plan::getEnvironmentScore() const{
     return environment_score;
 }
-void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
+void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){/// ask
     this->selectionPolicy = selectionPolicy;
 }
 void Plan::step(){
-    if(underConstruction.size()==(int)this->settlement->getType()){}
     for(int i=0;i<underConstruction.size();i++){
         Facility* pf= underConstruction[i];
-        pf->step();
+        pf->step();}
     while(underConstruction.size()<(int)this->settlement->getType()){
         selectionPolicy->selectFacility(facilityOptions);
     }
     for(int i=0;i<underConstruction.size();i++){
-     if(pf->getTimeLeft()<=0){
+        Facility* pf=underConstruction[i];
+        if(pf->getTimeLeft()<=0){
           facilities.push_back(pf);  
           underConstruction.erase(underConstruction.begin()+i);
           life_quality_score+= pf->getLifeQualityScore();
@@ -56,7 +56,7 @@ void Plan::step(){
     if(underConstruction.size()==(int)this->settlement->getType())
         this->status= PlanStatus::AVALIABLE;
     }
-}
+
 
 void Plan::printStatus(){
     std::cout << "PlanID:" + plan_id;
@@ -71,8 +71,16 @@ void Plan::printStatus(){
     for(Facility* f: facilities){
         std:: cout << f->getName()+" FacilityStatus: UNDER_CONSTRUCTION";
 
+    }}
+
+     const vector<Facility*> &Plan::getFacilities() const{
+            return facilities;
     }
-}
+    void Plan::addFacility(Facility* facility){
+        facilityOptions.push_back(facility);
+    }
+
+
 
 
 
