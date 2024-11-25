@@ -7,12 +7,10 @@ using namespace std;
 string SettlementTypeToString(SettlementType t){
     if (t == SettlementType:: VILLAGE)
         return "VILLAGE";
-    if (t == SettlementType:: CITY)
+    else if (t == SettlementType:: CITY)
         return "CITY"  ;
-    if (t == SettlementType:: METROPOLIS)
+    else if (t == SettlementType:: METROPOLIS)
         return "METROPOLIS";
-    else
-        return "Shouldn't be here :(";
 }
 
 Settlement::Settlement(const string &name , SettlementType type)

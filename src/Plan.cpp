@@ -39,12 +39,15 @@ void Plan::step(){
         Facility* pf= underConstruction[i];
         pf->step();}
     while(underConstruction.size()<(int)this->settlement->getType()){
-        selectionPolicy->selectFacility(facilityOptions);
+        Facility* fac = (selectionPolicy->selectFacility(facilityOptions),  &settlement->getName());
+        fac->setStatus(FacilityStatus::UNDER_CONSTRUCTIONS);
+        addFacility(fac);
     }
     for(int i=0;i<underConstruction.size();i++){
         Facility* pf=underConstruction[i];
         if(pf->getTimeLeft()<=0){
-          facilities.push_back(pf);  
+          pf->setStatus(FacilityStatus::OPERATIONAL);
+          addFacility(pf);  
           underConstruction.erase(underConstruction.begin()+i);
           life_quality_score+= pf->getLifeQualityScore();
           economy_score+= pf->getEconomyScore();
@@ -53,7 +56,7 @@ void Plan::step(){
         }}
     if(underConstruction.size()==(int)this->settlement->getType())
         this->status= PlanStatus::BUSY;
-    if(underConstruction.size()==(int)this->settlement->getType())
+    else
         this->status= PlanStatus::AVALIABLE;
     }
 
@@ -76,8 +79,11 @@ void Plan::printStatus(){
      const vector<Facility*> &Plan::getFacilities() const{
             return facilities;
     }
-    void Plan::addFacility(Facility* facility){
-        facilityOptions.push_back(facility);
+    void Plan::addFacility(Facility* facility){ ///not sure this is right implementation!!!!
+        if(facility->getStatus()== FacilityStatus::OPERATIONAL)
+            facilities.push_back(facility);
+        else
+            underConstruction.push_back(facility);
     }
     const string Plan::toString() const{
         return "PlanId:"+ plan_id;

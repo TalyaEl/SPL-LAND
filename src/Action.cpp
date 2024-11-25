@@ -7,7 +7,7 @@ enum class FacilityCategory;
 string ActionStatusToString(ActionStatus t){
     if (t == ActionStatus:: COMPLETED)
         return "COMPLETED";
-    if (t == ActionStatus:: ERROR)
+    else (t == ActionStatus:: ERROR)
         return "ERROR";
 }
 
