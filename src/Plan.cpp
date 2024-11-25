@@ -35,14 +35,24 @@ void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
     this->selectionPolicy = selectionPolicy;
 }
 void Plan::step(){
-    for(int i=0;i<=underConstruction.size();i++){
+    if(underConstruction.size()==(int)this->settlement->getType()){}
+    for(int i=0;i<underConstruction.size();i++){
         Facility* pf= underConstruction[i];
-        pf->reduceTime();
-        if(pf->getTimeLeft()<=0){
+        pf->step();
+    while(underConstruction.size()<(int)this->settlement->getType()){
+        selectionPolicy->selectFacility(facilityOptions);
+    }
+    for(int i=0;i<underConstruction.size();i++){
+     if(pf->getTimeLeft()<=0){
           facilities.push_back(pf);  
           underConstruction.erase(underConstruction.begin()+i);
-
-    }}
+          pf->setStatus(FacilityStatus::OPERATIONAL);
+        }}
+    if(underConstruction.size()==(int)this->settlement->getType())
+        this->status= PlanStatus::BUSY;
+    if(underConstruction.size()==(int)this->settlement->getType())
+        this->status= PlanStatus::AVALIABLE;
+    }
 }
 
 
