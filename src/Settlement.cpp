@@ -11,7 +11,6 @@ string SettlementTypeToString(SettlementType t){
         return "CITY"  ;
     if (t == SettlementType:: METROPOLIS)
         return "METROPOLIS";
-    
 }
 
     Settlement::Settlement(const string &name , SettlementType type)

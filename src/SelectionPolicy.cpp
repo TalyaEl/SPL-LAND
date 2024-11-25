@@ -40,7 +40,7 @@ BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int
 LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
 
 const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
-    
+
 }
 
 const string BalancedSelection::toString() const {
@@ -92,7 +92,7 @@ const FacilityType& SustainabilitySelection::selectFacility(const vector<Facilit
         }
         lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
     }
-    return facilitiesOptions[lastSelectedIndex];
+    return facilitiesOptions[lastSelect;..edIndex];
 }
 
 const string SustainabilitySelection::toString() const {
