@@ -2,15 +2,20 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
+using std::string;
+using std::vector;
 
-string SettlementTypeToString(SettlementType t){
-    if (t == SettlementType:: VILLAGE)
-        return "VILLAGE";
-    else if (t == SettlementType:: CITY)
-        return "CITY"  ;
-    else if (t == SettlementType:: METROPOLIS)
-        return "METROPOLIS";
+string SettlementTypeToString(SettlementType type){ //helper
+    switch (type) {
+        case SettlementType:: VILLAGE:
+            return "VILLAGE";
+        case SettlementType:: CITY:
+            return "CITY";
+        case SettlementType:: METROPOLIS:
+            return "METROPOLIS";
+        default:
+            return "UNKNOWN";
+    }
 }
 
 Settlement::Settlement(const string &name , SettlementType type)
