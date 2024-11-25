@@ -63,4 +63,9 @@ string facilityStatusToString(FacilityStatus t){
         const string Facility::toString() const{
             return getName()+", "+facilityStatusToString(status);
         }
+        void Facility::reduceTime(){
+            timeLeft--;
+
+        }
+
 
