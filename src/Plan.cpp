@@ -46,12 +46,31 @@ void Plan::step(){
      if(pf->getTimeLeft()<=0){
           facilities.push_back(pf);  
           underConstruction.erase(underConstruction.begin()+i);
+          life_quality_score+= pf->getLifeQualityScore();
+          economy_score+= pf->getEconomyScore();
+          environment_score+= pf->getEnvironmentScore();
           pf->setStatus(FacilityStatus::OPERATIONAL);
         }}
     if(underConstruction.size()==(int)this->settlement->getType())
         this->status= PlanStatus::BUSY;
     if(underConstruction.size()==(int)this->settlement->getType())
         this->status= PlanStatus::AVALIABLE;
+    }
+}
+
+void Plan::printStatus(){
+    std::cout << "PlanID:" + plan_id;
+    std::cout << "settelmentName:" + settlement->getName();
+    std::cout << "selectionPolicy:" + selectionPolicy->toString();
+    std::cout << "LifeQualityScore:"+ life_quality_score;
+    std:: cout<< "EconomyScore:"+ economy_score;
+    std::cout << "EnviornmentScore:"+ environment_score;
+    for(Facility* f: facilities){
+        std:: cout << f->getName()+" FacilityStatus: Operational";
+    }
+    for(Facility* f: facilities){
+        std:: cout << f->getName()+" FacilityStatus: UNDER_CONSTRUCTION";
+
     }
 }
 
