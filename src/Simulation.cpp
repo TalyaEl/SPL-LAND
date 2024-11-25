@@ -9,20 +9,10 @@ using std::vector;
 
 class BaseAction;
 class SelectionPolicy;
-class Simulation{
- private:
-        bool isRunning;
-        int planCounter; //For assigning unique plan IDs
-        vector<BaseAction*> actionsLog;
-        vector<Plan> plans;
-        vector<Settlement> settlements;
-        vector<FacilityType> facilitiesOptions;
 
-public:
-void start(){
+void Simulation::start(){
      std::cout << "the simulation has started";
 }
-void close(){
+void Simulation::close(){
         isRunning=false;
 }
-};

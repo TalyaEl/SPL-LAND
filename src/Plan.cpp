@@ -79,6 +79,10 @@ void Plan::printStatus(){
     void Plan::addFacility(Facility* facility){
         facilityOptions.push_back(facility);
     }
+    const string Plan::toString() const{
+        return "PlanId:"+ plan_id;
+
+    }
 
 
 
