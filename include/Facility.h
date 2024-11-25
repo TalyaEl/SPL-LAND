@@ -35,7 +35,6 @@ class FacilityType {
         const int lifeQuality_score;
         const int economy_score;
         const int environment_score;
-        const int score[3]; //added feild
 };
 
 
