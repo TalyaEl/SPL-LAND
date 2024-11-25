@@ -1,5 +1,6 @@
 #include "Facility.h"
-using namespace std;
+using std::string;
+using std::vector;
 
 string facilityStatusToString(FacilityStatus t){
     if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)

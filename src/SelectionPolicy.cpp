@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 using std::vector;
+using std::string;
 
 NaiveSelection::NaiveSelection(): lastSelectedIndex(-1) {}
 
@@ -21,9 +22,14 @@ const FacilityType& NaiveSelection::selectFacility(const vector<FacilityType>& f
 } ;  
 
 const string NaiveSelection::toString() const {
-
+    if (lastSelectedIndex == -1) {
+        return "No facility has been chosen yet.";
+    }
+    else {
+        return "Naive Selection, last selected index is:"+lastSelectedIndex;
+    }
 }
 
-NaiveSelection* NaiveSelection::*clone() const {
-
+NaiveSelection* NaiveSelection::clone() const {
+    return new NaiveSelection(*this);
 }
