@@ -32,10 +32,10 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
     size_t bestFacilityIndex = 0;
 
     for (size_t i = 0; i < facilitiesOptions.size(); i++) {
-        const FacilityType& type = facilitiesOptions[i];
-        int tempLifeQ = this->LifeQualityScore + type.getLifeQualityScore();
-        int tempEconomy = this->EconomyScore + type.getEconomyScore();
-        int tempEnvironment = this->EnvironmentScore + type.getEnvironmentScore();
+        const FacilityType& currentType = facilitiesOptions[i];
+        int tempLifeQ = this->LifeQualityScore + currentType.getLifeQualityScore();
+        int tempEconomy = this->EconomyScore + currentType.getEconomyScore();
+        int tempEnvironment = this->EnvironmentScore + currentType.getEnvironmentScore();
         int maxScore = std::max({tempLifeQ, tempEconomy,tempEnvironment});
         int minScore = std::min({tempLifeQ, tempEconomy,tempEnvironment});
         

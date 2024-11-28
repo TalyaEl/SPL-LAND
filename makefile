@@ -12,7 +12,7 @@ fornow:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Settlement.o src/Settlement.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Facility.o src/Facility.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/SelectionPolicy.o src/SelectionPolicy.cpp -Iinclude
-	# g++ -o Settlement bin/Settlement.o 
+	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Plan.o src/Plan.cpp -Iinclude 
 sim:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Simulation.o src/Simulation.cpp -Iinclude
 	g++ -o Simulation bin/Simulation.o
