@@ -23,6 +23,7 @@ class Simulation {
         void step();
         void close();
         void open();
+        Plan& noExist();
 
     private:
         bool isRunning;

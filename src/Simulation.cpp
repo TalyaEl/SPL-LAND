@@ -19,7 +19,6 @@ plans(),
 settlements(),
 facilitiesOptions(){}
 
-//tester
 
 void Simulation::start(){
      open();
@@ -29,6 +28,27 @@ void Simulation::start(){
   
 }
 
+Settlement *Simulation::getSettlement(const string &settlementName) {
+        bool isFound = isSettlementExists(settlementName);
+        if (!isFound)
+                return nullptr;
+        else {
+                for (Settlement* set : settlements) {
+                        if (set->getName() == settlementName) { 
+                                return set; 
+                        }
+                }
+        }
+}
+
+Plan &Simulation::getPlan(const int planID) {
+    if (plans.size() < planID || planID < 0) {
+         return noExist();
+    }
+    else     
+        return plans[planID];
+}
+
 void Simulation::close(){
         isRunning=false;
 }
@@ -36,4 +56,11 @@ void Simulation::open(){
         isRunning=true;
         std::cout << "The simulation has started"  << endl;
 
+}
+
+Plan& Simulation::noExist() {
+        Settlement no("noSuchSettlement",SettlementType::VILLAGE);
+        vector <FacilityType> temp;
+        Plan p(-1,no,nullptr,temp);
+        return p;
 }

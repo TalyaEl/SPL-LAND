@@ -18,6 +18,7 @@ string PlanStatusToString(PlanStatus t){
         return "BUSY";
 }
 
+
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions)
 :plan_id(planId),
 settlement(settlement),
