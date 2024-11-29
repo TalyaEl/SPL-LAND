@@ -11,13 +11,28 @@ using std::vector;
 class BaseAction;
 class SelectionPolicy;
 
-Simulation::Simulation(const string &configFilePath):isRunning(true),
-planCounter(1), actionLog(), Plans(),settlements(),facilityOptions(){}
+Simulation::Simulation(const string &configFilePath):
+isRunning(false),
+planCounter(0), 
+actionsLog(),
+plans(),
+settlements(),
+facilitiesOptions(){}
 
 
 void Simulation::start(){
-     std::cout << "the simulation has started";
+     open();
+     while (isRunning){
+
+     }
+  
 }
+
 void Simulation::close(){
         isRunning=false;
+}
+void Simulation::open(){
+        isRunning=true;
+        std::cout << "The simulation has started"  << endl;
+
 }
