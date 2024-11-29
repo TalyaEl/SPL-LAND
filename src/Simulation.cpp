@@ -18,6 +18,7 @@ planCounter(1), actionLog(), Plans(),settlements(),facilityOptions(){}
 void Simulation::start(){
      std::cout << "the simulation has started";
 }
+
 void Simulation::close(){
         isRunning=false;
 }
