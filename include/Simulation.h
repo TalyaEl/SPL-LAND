@@ -24,6 +24,11 @@ class Simulation {
         void close();
         void open();
         Plan& noExist();
+        int getPlanCounter();
+        vector<FacilityType> getfacilitiesOptions();
+        bool isFacilityExists(const string &FacilityName);
+        bool isPlanID(int planID);
+
 
     private:
         bool isRunning;

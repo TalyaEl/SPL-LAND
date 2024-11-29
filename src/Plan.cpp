@@ -165,6 +165,10 @@ const string Plan::toString() const{
     }
  }
 
+string Plan::getSP(){
+    return selectionPolicy->toString();
+}
+
 int main() {
     vector<FacilityType> facilities = {
         FacilityType("Facility1", FacilityCategory::LIFE_QUALITY, 100, 80, 60, 70),

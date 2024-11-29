@@ -61,12 +61,12 @@ bool Simulation::addFacility(FacilityType facility){
 }
 
 bool Simulation::isSettlementExists(const string &settlementName){
-        bool ans=true;
+        bool ans=false;
         int i=0;
         while(i < settlements.size() && ans){
              i++;
              if (settlements[i]->getName()==settlementName)
-                ans=false;
+                ans=true;
         }
         return ans;
 }
@@ -109,3 +109,29 @@ Plan& Simulation::noExist() {
         Plan p(-1,no,nullptr,temp);
         return p;
 }
+
+int Simulation::getPlanCounter(){
+        return planCounter;
+}
+
+vector<FacilityType> Simulation::getfacilitiesOptions(){
+        return facilitiesOptions;
+}
+
+bool Simulation::isFacilityExists(const string &FacilityName){
+ bool ans = false;
+ int i=0;
+ while(i< facilitiesOptions.size()&& ans){
+        if (facilitiesOptions[i].getName()== FacilityName)
+                return true;
+        i++; 
+        }
+return false;
+}
+
+bool Simulation::isPlanID(int planID){
+        if(planID<planCounter && planID>=0)
+                return true;
+        return false;
+}
+
