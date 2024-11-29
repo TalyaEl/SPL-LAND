@@ -29,6 +29,10 @@ class Simulation {
         bool isFacilityExists(const string &FacilityName);
         bool isPlanID(int planID);
 
+        void readMe(const string &configFilePath);
+        SettlementType stringToSetType(const string &settlementType);
+        FacilityCategory stringToFacCat(const string &facilityCategory);
+        SelectionPolicy* stringToSelPol(const string &selectionPolicy);
 
     private:
         bool isRunning;
