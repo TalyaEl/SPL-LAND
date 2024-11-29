@@ -14,6 +14,7 @@ class SelectionPolicy;
 Simulation::Simulation(const string &configFilePath):isRunning(true),
 planCounter(1), actionLog(), Plans(),settlements(),facilityOptions(){}
 
+//tester
 
 void Simulation::start(){
      std::cout << "the simulation has started";

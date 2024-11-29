@@ -3,13 +3,13 @@
 #include "Facility.h"
 using std::vector;
 using std::string;
-// using std::stringstream;
+
 
 class SelectionPolicy {
     public:
         virtual const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) = 0;
-        virtual const string toString() const = 0;//abstract
-        virtual SelectionPolicy* clone() const = 0;//abstract
+        virtual const string toString() const = 0;
+        virtual SelectionPolicy* clone() const = 0;
         virtual ~SelectionPolicy() = default;
 };
 
