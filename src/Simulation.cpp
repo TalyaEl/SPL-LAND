@@ -13,6 +13,7 @@ class SelectionPolicy;
 void Simulation::start(){
      std::cout << "the simulation has started";
 }
+
 void Simulation::close(){
         isRunning=false;
 }

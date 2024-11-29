@@ -21,7 +21,7 @@ string PlanStatusToString(PlanStatus t){
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions)
 :plan_id(planId),
 settlement(settlement),
-selectionPolicy(selectionPolicy),
+selectionPolicy(selectionPolicy->clone()),
 status(PlanStatus::AVALIABLE),
 facilities(),
 underConstruction(),
@@ -155,12 +155,12 @@ const string Plan::toString() const{
  }
 
  Plan::~Plan() {
-    selectionPolicy = nullptr;
+    delete selectionPolicy;
     for (size_t i = 0; i < facilities.size(); i++) {
-        facilities[i] = nullptr;
+        delete facilities[i];
     }
     for (size_t i = 0; i < underConstruction.size(); i++) {
-        underConstruction[i] = nullptr;
+        delete underConstruction[i];
     }
  }
 
@@ -184,8 +184,3 @@ int main() {
     delete selection;
     return 0;
 }
-
-
-
-
-
