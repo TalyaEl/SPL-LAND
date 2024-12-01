@@ -128,7 +128,7 @@ int Simulation::getPlanCounter(){
         return planCounter;
 }
 
-vector<FacilityType> Simulation::getfacilitiesOptions(){
+vector<FacilityType> &Simulation::getfacilitiesOptions(){
         return facilitiesOptions;
 }
 
@@ -145,6 +145,10 @@ bool Simulation::isPlanID(int planID) {
         if(planID < planCounter && planID >= 0)
                 return true;
         return false;
+}
+
+const vector<BaseAction*> Simulation::getActionLog(){
+        return actionsLog;
 }
 
 void Simulation::readMe(const string &configFilePath) {
