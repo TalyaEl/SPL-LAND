@@ -25,9 +25,10 @@ class Simulation {
         void open();
         Plan& noExist();
         int getPlanCounter();
-        vector<FacilityType> getfacilitiesOptions();
+        vector<FacilityType> &getfacilitiesOptions();
         bool isFacilityExists(const string &FacilityName);
         bool isPlanID(int planID);
+        const vector<BaseAction*> getActionLog();
 
         void readMe(const string &configFilePath);
         SettlementType stringToSetType(const string &settlementType);
