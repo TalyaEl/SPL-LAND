@@ -7,7 +7,7 @@
 #include "Simulation.h"
 #include <fstream>
 #include "Auxiliary.h"
-
+#include "Action.h"
 
 using std::string;
 using std::vector;
@@ -24,7 +24,8 @@ planCounter(0),
 actionsLog(),
 plans(),
 settlements(),
-facilitiesOptions(){
+facilitiesOptions(),
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})){
         readMe(configFilePath);
 }
 
@@ -36,7 +37,7 @@ void Simulation::start(){
 }
 
 void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy){
-     Plan p(planCounter, *settlement, selectionPolicy, this->facilitiesOptions);
+     Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);
      plans.push_back(p);
      planCounter++;
 }
@@ -86,8 +87,7 @@ bool Simulation::isSettlementExists(const string &settlementName){
 }
 
 Settlement *Simulation::getSettlement(const string &settlementName) {
-        bool isFound = isSettlementExists(settlementName);
-        if (!isFound)
+        if (!isSettlementExists(settlementName))
                 return nullptr;
         else {
                 for (Settlement* set : settlements) {
@@ -99,8 +99,8 @@ Settlement *Simulation::getSettlement(const string &settlementName) {
 }
 
 Plan &Simulation::getPlan(const int planID) {
-    if (plans.size() < planID || planID < 0) {
-         return noExist();
+    if (planID < 0 || planID >= plans.size()) {
+         return invalidPlan;
     }
     else     
         return plans[planID];
@@ -115,7 +115,7 @@ void Simulation::step(){
 void Simulation::close(){
         isRunning = false;
         for (Plan p : plans) {
-                std::cout << p.toString() << std::endl;
+                cout << p.toString() << endl;
         }
 }
 
@@ -124,13 +124,6 @@ void Simulation::open(){
         std::cout << "The simulation has started"  << std::endl;
 }
 
-Plan& Simulation::noExist() {
-        Settlement no("noSuchSettlement",SettlementType::VILLAGE);
-        vector <FacilityType> temp;
-        Plan p(-1,no,nullptr,temp);
-        return p;
-}
-
 int Simulation::getPlanCounter(){
         return planCounter;
 }
@@ -140,55 +133,27 @@ vector<FacilityType> Simulation::getfacilitiesOptions(){
 }
 
 bool Simulation::isFacilityExists(const string &FacilityName){
- bool ans = false;
- int i=0;
- while(i< facilitiesOptions.size()&& ans){
-        if (facilitiesOptions[i].getName()== FacilityName)
-                return true;
-        i++; 
+        for (const FacilityType facility : facilitiesOptions) {
+                if (facility.getName() == FacilityName) {
+                        return true;
+                }
         }
-return false;
-}
-
-bool Simulation::isPlanID(int planID){
-        if(planID<planCounter && planID>=0)
-                return true;
         return false;
 }
 
-
-int Simulation::getPlanCounter(){
-        return planCounter;
-}
-
-vector<FacilityType> Simulation::getfacilitiesOptions(){
-        return facilitiesOptions;
-}
-
-bool Simulation::isFacilityExists(const string &FacilityName){
- bool ans = false;
- int i=0;
- while(i< facilitiesOptions.size()&& ans){
-        if (facilitiesOptions[i].getName()== FacilityName)
-                return true;
-        i++; 
-        }
-return false;
-}
-
-bool Simulation::isPlanID(int planID){
-        if(planID<planCounter && planID>=0)
+bool Simulation::isPlanID(int planID) {
+        if(planID < planCounter && planID >= 0)
                 return true;
         return false;
 }
-
 
 void Simulation::readMe(const string &configFilePath) {
         std::ifstream configFile(configFilePath);
         string line;
         
         if (!configFile.is_open()) {
-                std::cerr << "Error: Could not open the config file: " << configFilePath << std::endl;
+                std::cerr << "Error: Could not open the config file: " << configFilePath << endl;
+                return;
         }
         
         else {
@@ -264,4 +229,77 @@ SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) {
         else {
                 return new SustainabilitySelection();
         }
+}
+
+Simulation::Simulation(const Simulation& other):
+isRunning(other.isRunning),
+planCounter(other.planCounter),
+actionsLog(),
+plans(other.plans),
+settlements(),
+facilitiesOptions(other.facilitiesOptions),
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})) {
+        for (BaseAction* action : other.actionsLog) {
+                actionsLog.push_back(action->clone());
+        }
+        for (Settlement* set : other.settlements) {
+                settlements.push_back(new Settlement(set->getName(), set->getType()));
+        }
+}
+
+Simulation::Simulation(Simulation&& otherTemp):
+isRunning(otherTemp.isRunning),
+planCounter(otherTemp.planCounter),
+actionsLog(std::move(otherTemp.actionsLog)),
+plans(std::move(otherTemp.plans)),
+settlements(std::move(otherTemp.settlements)),
+facilitiesOptions(std::move(otherTemp.facilitiesOptions)),
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})){}
+
+void Simulation::clear() {
+        for (BaseAction* action : actionsLog) {
+                delete action;
+        } 
+        actionsLog.clear();  
+
+        for (Settlement* set : settlements) {
+                delete set;
+        }     
+        settlements.clear();         
+}
+
+Simulation& Simulation::operator=(const Simulation& other) {
+        if (this != &other) {
+                clear();
+                isRunning = other.isRunning;
+                planCounter = other.planCounter;
+                for (BaseAction* action : other.actionsLog) {
+                        actionsLog.push_back(action->clone());
+                }
+                plans = other.plans;
+                for (Settlement* set : other.settlements) {
+                        settlements.push_back(new Settlement(set->getName(), set->getType()));
+                }                 
+                facilitiesOptions = other.facilitiesOptions;
+        }
+
+        return *this;
+}
+
+Simulation& Simulation::operator=(Simulation&& otherTemp) {
+        if (this != &otherTemp) {
+                clear();
+                isRunning = otherTemp.isRunning;
+                planCounter = otherTemp.planCounter;
+                actionsLog = std::move(otherTemp.actionsLog);
+                plans = std::move(otherTemp.plans);
+                settlements = std::move(otherTemp.settlements);
+                facilitiesOptions = std::move(otherTemp.facilitiesOptions);
+        }
+
+        return *this;        
+}
+
+Simulation::~Simulation() {
+        clear();
 }

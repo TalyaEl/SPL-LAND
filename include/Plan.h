@@ -16,7 +16,7 @@ class Plan {
         Plan(const Plan& other);
         Plan(Plan&& other);
         Plan& operator=(const Plan& other) = delete;
-        Plan& operator=(const Plan&& other) = delete;
+        Plan& operator=(Plan&& other) = delete;
         ~Plan();
 
         const int getlifeQualityScore() const;

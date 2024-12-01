@@ -4,6 +4,7 @@
 #include "Facility.h"
 #include "Plan.h"
 #include "Settlement.h"
+
 using std::string;
 using std::vector;
 
@@ -12,6 +13,12 @@ class SelectionPolicy;
 class Simulation {
     public:
         Simulation(const string &configFilePath);
+        Simulation(const Simulation& other);
+        Simulation(Simulation&& otherTemp);
+        Simulation& operator=(const Simulation& other);
+        Simulation& operator=(Simulation&& otherTemp);
+        ~Simulation();
+
         void start();
         void addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy);
         void addAction(BaseAction *action);
@@ -23,16 +30,16 @@ class Simulation {
         void step();
         void close();
         void open();
-        Plan& noExist();
+        
         int getPlanCounter();
         vector<FacilityType> getfacilitiesOptions();
         bool isFacilityExists(const string &FacilityName);
         bool isPlanID(int planID);
-
         void readMe(const string &configFilePath);
         SettlementType stringToSetType(const string &settlementType);
         FacilityCategory stringToFacCat(const string &facilityCategory);
         SelectionPolicy* stringToSelPol(const string &selectionPolicy);
+        void clear();
 
     private:
         bool isRunning;
@@ -41,5 +48,7 @@ class Simulation {
         vector<Plan> plans;
         vector<Settlement*> settlements;
         vector<FacilityType> facilitiesOptions;
+
+        Plan invalidPlan;
 
 };

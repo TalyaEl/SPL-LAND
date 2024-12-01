@@ -8,6 +8,7 @@ using std::endl;
 
 enum class SettlementType;
 enum class FacilityCategory;
+
 string ActionStatusToString(ActionStatus t){
     if (t == ActionStatus:: COMPLETED)
         return "COMPLETED";
@@ -58,7 +59,7 @@ SimulateStep *SimulateStep::clone() const {
 
 //addplan
 AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
-BaseAction(), settlementName(settlementName),selectionPolicy(selectionPolicy)
+BaseAction(), settlementName(settlementName),selectionPolicy(selectionPolicy) //use clone
 {}
 
 void AddPlan::act(Simulation &simulation){
