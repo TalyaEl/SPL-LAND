@@ -29,12 +29,12 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nu
         readMe(configFilePath);
 }
 
-void Simulation::start(){
-     open();
-     while (isRunning){
+// void Simulation::start(){
+//      open();
+//      while (isRunning){
 
-     }
-}
+//      }
+// }
 
 void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy){
      Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);
@@ -47,43 +47,33 @@ void Simulation::addAction(BaseAction *action){
 }
 
 bool Simulation::addSettlement(Settlement *settlement){
-        bool ans = true;
-        int i = 0;
-        while(i < settlements.size() && ans){
-             if (settlements[i]->getName() == settlement->getName())
-                ans = false;
-             i++;   
+        for (Settlement* set : settlements) {
+                if (set->getName() == settlement->getName()) {
+                        return false;
+                }
         }
-        
-        if(ans)
-             settlements.push_back(settlement);
-
-        return ans;
+        settlements.push_back(settlement);
+        return true;
 }
 
 bool Simulation::addFacility(FacilityType facility){
-        bool ans = true;
-        int i = 0;
-        while(i < facilitiesOptions.size() && ans){
-                if (facilitiesOptions[i].getName() == facility.getName())
-                    ans = false; 
-                i++;
+        for (FacilityType type : facilitiesOptions) {
+                if (type.getName() == facility.getName()) {
+                        return false;
+                }
         }
-
-        if(ans)
-                facilitiesOptions.push_back(facility);
-        return ans;
+        facilitiesOptions.push_back(facility);
+        return true;
 }
 
 bool Simulation::isSettlementExists(const string &settlementName){
-        bool ans = false;
-        int i = 0;
-        while(i < settlements.size() && ans){
-             if (settlements[i]->getName() == settlementName)
-                ans = true;
-             i++;   
-        }
-        return ans;
+
+        for (Settlement* set : settlements) {
+                if (set->getName() == settlementName) {
+                        return true;
+                }
+        }        
+        return false;
 }
 
 Settlement *Simulation::getSettlement(const string &settlementName) {
@@ -99,11 +89,11 @@ Settlement *Simulation::getSettlement(const string &settlementName) {
 }
 
 Plan &Simulation::getPlan(const int planID) {
-    if (planID < 0 || planID >= plans.size()) {
+    if (planID < 0 || static_cast<size_t>(planID) >= plans.size()) {
          return invalidPlan;
     }
     else     
-        return plans[planID];
+        return plans[static_cast<size_t>(planID)];
 }
 
 void Simulation::step(){
