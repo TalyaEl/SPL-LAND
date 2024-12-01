@@ -14,9 +14,9 @@ class Simulation {
     public:
         Simulation(const string &configFilePath);
         Simulation(const Simulation& other);
-        Simulation(Simulation&& otherTemp);
+        Simulation(Simulation&& otherTemp) noexcept;
         Simulation& operator=(const Simulation& other);
-        Simulation& operator=(Simulation&& otherTemp);
+        Simulation& operator=(Simulation&& otherTemp) noexcept;
         ~Simulation();
 
         // void start();

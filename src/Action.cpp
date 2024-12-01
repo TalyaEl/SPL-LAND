@@ -47,7 +47,7 @@ BaseAction(),numOfSteps(numOfSteps)
 {}
 
 void SimulateStep::act(Simulation &simulation){
-  for (size_t i = 0; i < numOfSteps; i++)
+  for (int i = 0; i < numOfSteps; i++)
   {
    simulation.step();
   } 
@@ -263,7 +263,7 @@ extern Simulation* backup;
        error("No backup available");
     }
     else{
-        simulation=backup;
+        simulation = *backup;
         complete();
     }
     simulation.addAction(this);

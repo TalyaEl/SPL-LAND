@@ -86,6 +86,7 @@ Settlement *Simulation::getSettlement(const string &settlementName) {
                         }
                 }
         }
+        return nullptr;
 }
 
 Plan &Simulation::getPlan(const int planID) {
@@ -241,7 +242,7 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nu
         }
 }
 
-Simulation::Simulation(Simulation&& otherTemp):
+Simulation::Simulation(Simulation&& otherTemp)noexcept:
 isRunning(otherTemp.isRunning),
 planCounter(otherTemp.planCounter),
 actionsLog(std::move(otherTemp.actionsLog)),
@@ -264,25 +265,29 @@ void Simulation::clear() {
 
 Simulation& Simulation::operator=(const Simulation& other) {
         if (this != &other) {
-                clear();
+                this->clear();
                 isRunning = other.isRunning;
                 planCounter = other.planCounter;
+                for(Plan p: other.plans){
+                        plans.push_back(p);
+                }
+                for(FacilityType fac: other.facilitiesOptions){
+                        facilitiesOptions.push_back(fac);
+                        }
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
                 }
-                plans = other.plans;
                 for (Settlement* set : other.settlements) {
                         settlements.push_back(new Settlement(set->getName(), set->getType()));
-                }                 
-                facilitiesOptions = other.facilitiesOptions;
+                }         
         }
 
         return *this;
 }
 
-Simulation& Simulation::operator=(Simulation&& otherTemp) {
+Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
         if (this != &otherTemp) {
-                clear();
+                this->clear();
                 isRunning = otherTemp.isRunning;
                 planCounter = otherTemp.planCounter;
                 actionsLog = std::move(otherTemp.actionsLog);
