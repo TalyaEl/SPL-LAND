@@ -79,10 +79,3 @@ const FacilityStatus& Facility::getStatus() const{
 const string Facility::toString() const{
     return getName()+", "+facilityStatusToString(status);
 }
-
-int main(){
-    return 0;
-}
-     
-
-

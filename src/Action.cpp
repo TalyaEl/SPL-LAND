@@ -185,11 +185,15 @@ BaseAction(),planId(planId), newPolicy(newPolicy)
 {}
 
 void ChangePlanPolicy::act(Simulation &simulation){
-    if (simulation.getPlan(planId).getSP() == newPolicy)
+    if (simulation.getPlan(planId).getSP() == newPolicy || simulation.isPlanID(planId)==false)
         error("Cannot change selection policy");
     else{
+        string temp= simulation.getPlan(planId).getSP();
         simulation.getPlan(planId).setSelectionPolicy(simulation.stringToSelPol(newPolicy));
         complete();
+        cout<< "PlanId: " << std::to_string(planId) << endl;
+        cout<< "previousPolicy: " << temp << endl;
+        cout<< "newPolicy: " << newPolicy<< endl;
     }
     simulation.addAction(this);
 

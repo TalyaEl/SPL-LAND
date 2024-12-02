@@ -30,8 +30,3 @@ Settlement::Settlement(const string &name , SettlementType type)
     const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
 }
-
-int main(){
-    std::cout << "hello\n";
-    return 0;
-}

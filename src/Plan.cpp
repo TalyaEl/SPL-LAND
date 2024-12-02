@@ -174,24 +174,3 @@ const string Plan::toString() const{
 string Plan::getSP(){
     return selectionPolicy->toString();
 }
-
-int main() {
-    vector<FacilityType> facilities = {
-        FacilityType("Facility1", FacilityCategory::LIFE_QUALITY, 100, 80, 60, 70),
-        FacilityType("Facility2", FacilityCategory::ECONOMY, 200, 60, 90, 50),
-        FacilityType("Facility3", FacilityCategory::ENVIRONMENT, 300, 70, 40, 95)
-    };
-
-    // Create a selection policy
-    SelectionPolicy* selection = new BalancedSelection(70, 70, 70);
-
-    // Select a facility
-    const FacilityType& selectedFacility = selection->selectFacility(facilities);
-
-    // Output the selected facility's name (assuming getName() is implemented)
-    std::cout << "Selected Facility: " << selectedFacility.getName() << std::endl;
-
-    // Clean up
-    delete selection;
-    return 0;
-}

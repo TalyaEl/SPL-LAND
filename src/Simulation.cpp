@@ -29,12 +29,67 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nu
         readMe(configFilePath);
 }
 
-// void Simulation::start(){
-//      open();
-//      while (isRunning){
+void Simulation::start(){
+     open();
+     while (isRunning){
+        string userInput;
+        std::getline(std::cin, userInput);
+        if(!userInput.empty()){
+                vector<string> parsedAr = Auxiliary::parseArguments(userInput);
+                if (parsedAr[0] == "close") {
+                        Close closeSim = Close();
+                        closeSim.act(*this);
+                }
 
-//      }
-// }
+                if (parsedAr[0] == "log") {
+                        PrintActionsLog printLog = PrintActionsLog();
+                        printLog.act(*this);
+                }
+
+                if (parsedAr[0] == "backup") {
+                        BackupSimulation back = BackupSimulation();
+                        back.act(*this);
+                }
+
+                if (parsedAr[0] == "restore") {
+                        RestoreSimulation rest = RestoreSimulation();
+                        rest.act(*this);
+                }
+
+                if (parsedAr[0] == "changePolicy") {
+                        ChangePlanPolicy changePP = ChangePlanPolicy(stoi(parsedAr[1]), parsedAr[2]);
+                        changePP.act(*this);
+                }
+
+                if (parsedAr[0] == "planStatus") {
+                        PrintPlanStatus printPS = PrintPlanStatus(stoi(parsedAr[1]));
+                        printPS.act(*this);
+                }
+
+                if (parsedAr[0] == "settlement") {
+                        AddSettlement set = AddSettlement(parsedAr[1], stringToSetType(parsedAr[2]));
+                        set.act(*this);
+                }
+
+                if (parsedAr[0] == "plan") {
+                        AddPlan plan = AddPlan(parsedAr[1], parsedAr[2]);
+                        plan.act(*this);
+                }
+
+                if (parsedAr[0] == "step") {
+                        SimulateStep simStep = SimulateStep(stoi(parsedAr[1]));
+                        simStep.act(*this);
+                }
+                if (parsedAr[0] == "facility") {
+                        AddFacility fac = AddFacility(parsedAr[1], stringToFacCat(parsedAr[2]), stoi(parsedAr[3]), stoi(parsedAr[4]), stoi(parsedAr[5]), stoi(parsedAr[6]));
+                        fac.act(*this);
+                }
+        }
+        
+        else
+                cout<< "invalid input"<< endl;
+     }
+}
 
 void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy){
      Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);

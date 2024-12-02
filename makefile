@@ -8,8 +8,6 @@ link:
 
 compile:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/main.o src/main.cpp -Iinclude
-	g++ -o main bin/main.o
-fornow:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Settlement.o src/Settlement.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Facility.o src/Facility.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/SelectionPolicy.o src/SelectionPolicy.cpp -Iinclude
@@ -18,16 +16,8 @@ fornow:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Simulation.o src/Simulation.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Action.o src/Action.cpp -Iinclude
 
-
-sim:
-
-	g++ -o Simulation bin/Simulation.o
-
-aux:
-	g++ -o Auxiliary bin/Auxiliary.o
-
-action:
-	g++ -o Action bin/Action.o
+fornow:
+	g++ -o main bin/main.o
 
 clean:
 	rm -f bin/*

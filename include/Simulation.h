@@ -19,7 +19,7 @@ class Simulation {
         Simulation& operator=(Simulation&& otherTemp) noexcept;
         ~Simulation();
 
-        // void start();
+        void start();
         void addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy);
         void addAction(BaseAction *action);
         bool addSettlement(Settlement *settlement);
