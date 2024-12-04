@@ -52,7 +52,6 @@ void SimulateStep::act(Simulation &simulation) {
    simulation.step();
   } 
   complete();
-  simulation.addAction(this);
 }
 
 const string SimulateStep::toString() const {
@@ -79,7 +78,6 @@ void AddPlan::act(Simulation &simulation){
         simulation.addPlan(temp,simulation.stringToSelPol(selectionPolicy));
         complete();
          }
-    simulation.addAction(this);
 
 }
 
@@ -104,7 +102,7 @@ else{
     simulation.addSettlement(s);
     complete();
 }
-simulation.addAction(this);
+
 
 } 
 
@@ -137,7 +135,6 @@ void AddFacility::act(Simulation &simulation){
         simulation.addFacility(*temp);
         complete();
     }
-    simulation.addAction(this);
 
 }
 
@@ -165,8 +162,6 @@ void PrintPlanStatus::act(Simulation &simulation){
         simulation.getPlan(planId).printStatus();
         complete();
     }
-    simulation.addAction(this);
-
 }
 
 PrintPlanStatus *PrintPlanStatus::clone() const{
@@ -195,8 +190,6 @@ void ChangePlanPolicy::act(Simulation &simulation){
         cout<< "previousPolicy: " << temp << endl;
         cout<< "newPolicy: " << newPolicy<< endl;
     }
-    simulation.addAction(this);
-
 }
 
 ChangePlanPolicy *ChangePlanPolicy::clone() const{
@@ -215,7 +208,6 @@ void PrintActionsLog::act(Simulation &simulation){
     for(BaseAction* temp: simulation.getActionLog()){
        cout << temp->toString()  << endl;}
     complete();
-    simulation.addAction(this);
 }
 
 PrintActionsLog *PrintActionsLog::clone() const{
@@ -247,7 +239,6 @@ void BackupSimulation::act(Simulation &simulation){
     extern Simulation* backup;
     backup = &simulation;
     complete();
-    simulation.addAction(this);
 }
 
 BackupSimulation *BackupSimulation::clone() const{
@@ -270,7 +261,6 @@ extern Simulation* backup;
         simulation = *backup;
         complete();
     }
-    simulation.addAction(this);
 }
 
 RestoreSimulation *RestoreSimulation::clone() const{

@@ -37,38 +37,45 @@ void Simulation::start(){
         if(!userInput.empty()){
                 vector<string> parsedAr = Auxiliary::parseArguments(userInput);
                 if (parsedAr[0] == "close") {
-                        Close closeSim = Close();
+                        Close closeSim =  Close();
                         closeSim.act(*this);
+                        actionsLog.push_back(closeSim.clone());
                 }
 
                 if (parsedAr[0] == "log") {
                         PrintActionsLog printLog = PrintActionsLog();
                         printLog.act(*this);
+                        actionsLog.push_back(printLog.clone());
                 }
 
                 if (parsedAr[0] == "backup") {
                         BackupSimulation back = BackupSimulation();
                         back.act(*this);
+                        actionsLog.push_back(back.clone());
                 }
 
                 if (parsedAr[0] == "restore") {
                         RestoreSimulation rest = RestoreSimulation();
                         rest.act(*this);
+                        actionsLog.push_back(rest.clone());
                 }
 
                 if (parsedAr[0] == "changePolicy") {
                         ChangePlanPolicy changePP = ChangePlanPolicy(stoi(parsedAr[1]), parsedAr[2]);
                         changePP.act(*this);
+                        actionsLog.push_back(changePP.clone());
                 }
 
                 if (parsedAr[0] == "planStatus") {
                         PrintPlanStatus printPS = PrintPlanStatus(stoi(parsedAr[1]));
                         printPS.act(*this);
+                        actionsLog.push_back(printPS.clone());
                 }
 
                 if (parsedAr[0] == "settlement") {
                         AddSettlement set = AddSettlement(parsedAr[1], stringToSetType(parsedAr[2]));
                         set.act(*this);
+                        actionsLog.push_back(set.clone());
                 }
 
                 if (parsedAr[0] == "plan") {
@@ -76,16 +83,19 @@ void Simulation::start(){
                         {
                         AddPlan plan = AddPlan(parsedAr[1], parsedAr[2]);
                         plan.act(*this);
+                        actionsLog.push_back(plan.clone());
                         }   
                 }
 
                 if (parsedAr[0] == "step") {
                         SimulateStep simStep = SimulateStep(stoi(parsedAr[1]));
                         simStep.act(*this);
+                        actionsLog.push_back(simStep.clone());
                 }
                 if (parsedAr[0] == "facility") {
                         AddFacility fac = AddFacility(parsedAr[1], stringToFacCat(parsedAr[2]), stoi(parsedAr[3]), stoi(parsedAr[4]), stoi(parsedAr[5]), stoi(parsedAr[6]));
                         fac.act(*this);
+                        actionsLog.push_back(fac.clone());
                 }
         }
         
@@ -197,7 +207,7 @@ bool Simulation::isPlanID(int planID) {
 }
 
 const vector<BaseAction*> Simulation::getActionLog(){
-        return actionsLog;
+        return  actionsLog;
 }
 
 void Simulation::readMe(const string &configFilePath) {
