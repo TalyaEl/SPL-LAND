@@ -371,6 +371,3 @@ Simulation::~Simulation() {
         clear();
 }
 
-void Simulation::setPlanCounter(int x){
-       planCounter=x; 
-}
