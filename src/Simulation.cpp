@@ -223,7 +223,7 @@ void Simulation::readMe(const string &configFilePath) {
                 while (std::getline(configFile, line)) {
                         vector<string> parsedAr = Auxiliary::parseArguments(line);
 
-                        if (parsedAr.empty()) {
+                        if (parsedAr.empty() || parsedAr[0] == "#") {
                                 continue;
                         }
 
@@ -239,7 +239,7 @@ void Simulation::readMe(const string &configFilePath) {
                                 addFacility(curFac);
                         }
 
-                        else {
+                        else if (parsedAr[0] == "plan") {
                                 Settlement* curSet = getSettlement(parsedAr[1]);
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
                                 addPlan(curSet, curSelPol);
