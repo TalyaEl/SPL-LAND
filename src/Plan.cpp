@@ -48,17 +48,15 @@ void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
 }
 
 void Plan::step(){
-    while (this->status == PlanStatus::AVALIABLE) {
+    if(status == PlanStatus::AVALIABLE){
+    while (underConstruction.size()<settlement.getConstructionLimit()) {
         Facility* newFacility = new Facility(selectionPolicy->selectFacility(facilityOptions), settlement.getName());
         underConstruction.push_back(newFacility);
-        if (underConstruction.size() - 1 == (size_t)this->settlement.getType()) {
-            this->status = PlanStatus::BUSY;
-        }
-    }
+     
+    }}
 
-    for (size_t i = 0; i < underConstruction.size(); i++) {
-        Facility* current = underConstruction[i];
-        current->step();
+    for (Facility* f: underConstruction) {
+        f->step();
     }
 
     for (int i = underConstruction.size() - 1; i >= 0; i--) {
@@ -71,6 +69,10 @@ void Plan::step(){
             status= PlanStatus::AVALIABLE;
         }
     }
+    if(underConstruction.size()== settlement.getConstructionLimit())
+        status= PlanStatus::BUSY;
+    else
+        status= PlanStatus::AVALIABLE;
 }
 
 

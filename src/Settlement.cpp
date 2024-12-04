@@ -30,3 +30,11 @@ Settlement::Settlement(const string &name , SettlementType type)
     const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
 }
+    int Settlement::getConstructionLimit() const{
+        if(type==SettlementType::VILLAGE)
+            return 1;
+        if(type==SettlementType::CITY)
+            return 2;
+        else
+            return 3;
+    }
