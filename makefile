@@ -1,5 +1,5 @@
 # Please implement your Makefile rules and targets below.
-all: clean compile link
+all: clean compile link 
 
 link:
 	g++ -o bin/skeleton bin/main.o bin/Settlement.o bin/Simulation.o \

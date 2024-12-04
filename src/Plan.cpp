@@ -49,7 +49,7 @@ void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
 
 void Plan::step(){
     while (this->status == PlanStatus::AVALIABLE) {
-        Facility* newFacility = new Facility(selectionPolicy->selectFacility(facilityOptions), this->settlement.getName());
+        Facility* newFacility = new Facility(selectionPolicy->selectFacility(facilityOptions), settlement.getName());
         underConstruction.push_back(newFacility);
         if (underConstruction.size() - 1 == (size_t)this->settlement.getType()) {
             this->status = PlanStatus::BUSY;
@@ -68,7 +68,7 @@ void Plan::step(){
             environment_score += underConstruction[i]->getEnvironmentScore();
             addFacility(underConstruction[i]);
             underConstruction.erase(underConstruction.begin() + i);
-            this->status= PlanStatus::AVALIABLE;
+            status= PlanStatus::AVALIABLE;
         }
     }
 }

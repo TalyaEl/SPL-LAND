@@ -46,7 +46,7 @@ SimulateStep::SimulateStep(const int numOfSteps):
 BaseAction(),numOfSteps(numOfSteps)
 {}
 
-void SimulateStep::act(Simulation &simulation){
+void SimulateStep::act(Simulation &simulation) override{
   for (int i = 0; i < numOfSteps; i++)
   {
    simulation.step();
@@ -55,11 +55,11 @@ void SimulateStep::act(Simulation &simulation){
   simulation.addAction(this);
 }
 
-const string SimulateStep::toString() const{
+const string SimulateStep::toString() const override{
     return "simulationStep "+ std::to_string(numOfSteps)+" "+ActionStatusToString(this->getStatus()) ;
 }
 
-SimulateStep *SimulateStep::clone() const {
+SimulateStep *SimulateStep::clone() const override{
     return new SimulateStep(*this);
 }
 
@@ -245,6 +245,11 @@ const string Close::toString() const{
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
     extern Simulation* backup;
+    backup->setPlanCounter(simulation.getPlanCounter());
+    for(BaseAction* act: simulation.getActionLog()){
+        backup->addAction(act->clone());
+    }
+
     backup = &simulation;
     complete();
     simulation.addAction(this);

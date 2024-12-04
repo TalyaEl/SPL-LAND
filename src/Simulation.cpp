@@ -25,7 +25,7 @@ actionsLog(),
 plans(),
 settlements(),
 facilitiesOptions(),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})){
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection(), {})){
         readMe(configFilePath);
 }
 
@@ -72,8 +72,11 @@ void Simulation::start(){
                 }
 
                 if (parsedAr[0] == "plan") {
+                        if (parsedAr[2]!= "null")
+                        {
                         AddPlan plan = AddPlan(parsedAr[1], parsedAr[2]);
                         plan.act(*this);
+                        }   
                 }
 
                 if (parsedAr[0] == "step") {
@@ -356,4 +359,8 @@ Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
 
 Simulation::~Simulation() {
         clear();
+}
+
+void Simulation::setPlanCounter(int x){
+       planCounter=x; 
 }
