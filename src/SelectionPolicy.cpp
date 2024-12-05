@@ -55,7 +55,7 @@ const string BalancedSelection::toString() const {
 }
 
 BalancedSelection* BalancedSelection::clone() const {
-    return new BalancedSelection(LifeQualityScore,EconomyScore,EnvironmentScore);
+    return new BalancedSelection(*this);
 }
 
 // Economy Selection

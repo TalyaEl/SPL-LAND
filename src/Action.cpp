@@ -146,7 +146,7 @@ AddFacility *AddFacility::clone() const{
 }
 
 const string AddFacility::toString() const{
-    return "facility "+ facilityName+ std::to_string((int)facilityCategory)+" "+
+    return "facility "+ facilityName+" "+std::to_string((int)facilityCategory)+" "+
     std::to_string(price)+" "+std::to_string(lifeQualityScore)+" "+
     std::to_string(economyScore)+" "+std::to_string(environmentScore)+" "+
     ActionStatusToString(this->getStatus());
@@ -239,12 +239,10 @@ const string Close::toString() const{
 //backup simulation
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
-    if (backup == nullptr) {
-        backup = new Simulation(simulation);
-    }
-    else {
-        *backup = simulation;
-    }
+ 
+    delete backup;
+    backup=nullptr;
+    backup = new Simulation(simulation);
     complete();
 }
 

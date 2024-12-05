@@ -108,6 +108,7 @@ void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectio
      Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);
      plans.push_back(p);
      planCounter++;
+     delete selectionPolicy;
 }
 
 void Simulation::addAction(BaseAction *action){
@@ -172,6 +173,7 @@ void Simulation::close(){
         for (Plan p : plans) {
                 cout << p.toString() << endl;
         }
+        delete this;
 }
 
 void Simulation::open(){
@@ -308,7 +310,8 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), ne
 
         for (Plan p : other.plans) {
                 Settlement* tempSet = getSettlement(p.getSettlement().getName());
-                plans.push_back(Plan(p, *tempSet));
+                Plan temp=Plan(p, *tempSet);
+                plans.push_back(temp);
         }
 
         for (BaseAction* action : other.actionsLog) {
@@ -380,5 +383,9 @@ Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
 
 Simulation::~Simulation() {
         clear();
+        for(FacilityType f: facilitiesOptions)
+                delete &f;
+        facilitiesOptions.clear();
+        
 }
 
