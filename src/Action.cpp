@@ -7,6 +7,7 @@
 
 using std::cout;
 using std::endl;
+
 extern Simulation* backup;
 
 enum class SettlementType;
@@ -243,8 +244,8 @@ void BackupSimulation::act(Simulation &simulation){
     }
     else {
         *backup = simulation;
-        complete();
     }
+    complete();
 }
 
 BackupSimulation *BackupSimulation::clone() const{
