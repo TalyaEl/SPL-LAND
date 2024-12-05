@@ -194,6 +194,6 @@ string Plan::getSP(){
     return selectionPolicy->toString();
 }
 
-const Settlement& Plan::getSettlement(){
+const Settlement& Plan::getSettlement() const{
     return settlement;
 }

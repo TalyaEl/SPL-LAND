@@ -34,7 +34,7 @@ void BaseAction::complete(){
 }
 
 void BaseAction::error(string errorMsg){
-    cout << errorMsg << endl;
+    cout << "Error: " << errorMsg << endl;
 }
 
 const string &BaseAction::getErrorMsg() const{
@@ -58,7 +58,7 @@ void SimulateStep::act(Simulation &simulation) {
 }
 
 const string SimulateStep::toString() const {
-    return "simulationStep "+ std::to_string(numOfSteps)+" "+ActionStatusToString(this->getStatus()) ;
+    return "step "+ std::to_string(numOfSteps)+" "+ActionStatusToString(this->getStatus()) ;
 }
 
 SimulateStep *SimulateStep::clone() const {
@@ -172,7 +172,7 @@ PrintPlanStatus *PrintPlanStatus::clone() const{
 }
 
 const string PrintPlanStatus::toString() const{
-    return "printPlanStatus "+
+    return "planStatus "+
     std::to_string(this->planId)+" "+
     ActionStatusToString(this->getStatus());
 }
@@ -253,7 +253,7 @@ BackupSimulation *BackupSimulation::clone() const{
 }
 
 const string BackupSimulation::toString() const{
-    return "Backup "+ActionStatusToString(this->getStatus());
+    return "backup "+ActionStatusToString(this->getStatus());
 }
 
 //restore simulation
