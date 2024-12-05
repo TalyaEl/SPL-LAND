@@ -308,6 +308,7 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), ne
                 settlements.push_back(new Settlement(set->getName(), set->getType()));
         }
 
+        plans.clear();
         for (Plan p : other.plans) {
                 Settlement* tempSet = getSettlement(p.getSettlement().getName());
                 Plan temp=Plan(p, *tempSet);
@@ -346,22 +347,21 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 isRunning = other.isRunning;
                 planCounter = other.planCounter;
 
-                for (Settlement* set : other.settlements) { 
+                for (BaseAction* action : other.actionsLog) {
+                        actionsLog.push_back(action->clone());
+                } 
+
+                for (const Settlement* set : other.settlements) { 
                         settlements.push_back(new Settlement(set->getName(), set->getType()));
                 }
 
-                for(FacilityType fac: other.facilitiesOptions){ 
+                for (FacilityType fac: other.facilitiesOptions){ 
                         facilitiesOptions.push_back(fac);
                 }
 
-                for(Plan p: other.plans){ 
-                        Settlement* tempSet = getSettlement(p.getSettlement().getName());
-                        plans.push_back(Plan(p, *tempSet));
+                for (const Plan &p: other.plans){ 
+                        plans.push_back(Plan(p, *getSettlement(p.getSettlement().getName())));
                 }
-
-                for (BaseAction* action : other.actionsLog) {
-                        actionsLog.push_back(action->clone());
-                }  
         }
 
         return *this;

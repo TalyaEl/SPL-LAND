@@ -30,7 +30,7 @@ class Plan {
         void addFacility(Facility* facility);
         const string toString() const;
         string getSP();
-        const Settlement& getSettlement();
+        const Settlement& getSettlement() const;
 
     private:
         int plan_id;
