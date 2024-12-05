@@ -21,17 +21,20 @@ string SettlementTypeToString(SettlementType type){ //helper
 Settlement::Settlement(const string &name , SettlementType type)
         :name(name), type(type){}
 
-    const  string &Settlement::getName() const{
-        return name;
+const string &Settlement::getName() const{
+   return name;
 }
-    SettlementType Settlement::getType() const{
+SettlementType Settlement::getType() const{
          return type;
 }
-    const string Settlement::toString() const{
+const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
 }
-
-int main(){
-    std::cout << "hello\n";
-    return 0;
-}
+size_t Settlement::getConstructionLimit() const{
+        if(this->getType()==SettlementType::VILLAGE)
+            return size_t(1);
+        if(this->getType()==SettlementType::CITY)
+            return size_t(2);
+        else
+            return size_t(3);
+    }

@@ -1,6 +1,8 @@
 #include "Facility.h"
+#include <iostream>
 using std::string;
 using std::vector;
+
 
 string facilityStatusToString(FacilityStatus t){
     if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)
@@ -63,7 +65,7 @@ const int Facility::getTimeLeft() const{
 FacilityStatus Facility::step(){
     timeLeft--;
     if (getTimeLeft() == 0) {
-        status = FacilityStatus::OPERATIONAL;
+        setStatus(FacilityStatus::OPERATIONAL);
     }
     return status;
 }
@@ -79,10 +81,3 @@ const FacilityStatus& Facility::getStatus() const{
 const string Facility::toString() const{
     return getName()+", "+facilityStatusToString(status);
 }
-
-int main(){
-    return 0;
-}
-     
-
-

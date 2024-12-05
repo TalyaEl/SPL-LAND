@@ -52,7 +52,7 @@ const string BalancedSelection::toString() const {
 }
 
 BalancedSelection* BalancedSelection::clone() const {
-    return new BalancedSelection(*this);
+    return new BalancedSelection(LifeQualityScore,EconomyScore,EnvironmentScore);
 }
 
 // Economy Selection
@@ -71,7 +71,7 @@ const string EconomySelection::toString() const {
 }
 
 EconomySelection* EconomySelection::clone() const {
-    return new EconomySelection(*this);
+    return new EconomySelection();
 }
 
 // Sustainability Selection
@@ -90,26 +90,5 @@ const string SustainabilitySelection::toString() const {
 }
 
 SustainabilitySelection* SustainabilitySelection::clone() const {
-    return new SustainabilitySelection(*this);
-}
-
-int main() {
-    vector<FacilityType> facilities = {
-        FacilityType("Facility1", FacilityCategory::LIFE_QUALITY, 100, 80, 60, 70),
-        FacilityType("Facility2", FacilityCategory::ECONOMY, 200, 60, 90, 50),
-        FacilityType("Facility3", FacilityCategory::ENVIRONMENT, 300, 70, 40, 95)
-    };
-
-    // Create a selection policy
-    SelectionPolicy* selection = new BalancedSelection(70, 70, 70);
-
-    // Select a facility
-    const FacilityType& selectedFacility = selection->selectFacility(facilities);
-
-    // Output the selected facility's name (assuming getName() is implemented)
-    std::cout << "Selected Facility: " << selectedFacility.getName() << std::endl;
-
-    // Clean up
-    delete selection;
-    return 0;
+    return new SustainabilitySelection();
 }

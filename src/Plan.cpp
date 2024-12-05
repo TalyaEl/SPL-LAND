@@ -43,34 +43,34 @@ const int Plan::getEnvironmentScore() const{
 }
 
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
-    delete selectionPolicy;
     this->selectionPolicy = selectionPolicy->clone();
 }
 
 void Plan::step(){
-    while (this->status == PlanStatus::AVALIABLE) {
-        Facility* newFacility = new Facility(selectionPolicy->selectFacility(facilityOptions), this->settlement.getName());
+    if(status == PlanStatus::AVALIABLE){
+    while (underConstruction.size()<settlement.getConstructionLimit()) {
+        FacilityType select= selectionPolicy->selectFacility(facilityOptions);
+        Facility* newFacility= new Facility(select, settlement.getName());
         underConstruction.push_back(newFacility);
-        if (underConstruction.size() - 1 == (size_t)this->settlement.getType()) {
-            this->status = PlanStatus::BUSY;
-        }
-    }
+     
+    }}
 
-    for (size_t i = 0; i < underConstruction.size(); i++) {
-        Facility* current = underConstruction[i];
-        current->step();
-    }
-
-    for (int i = underConstruction.size() - 1; i >= 0; i--) {
-        if (underConstruction[i]->getStatus() == FacilityStatus::OPERATIONAL) {
-            life_quality_score += underConstruction[i]->getLifeQualityScore();
-            economy_score += underConstruction[i]->getEconomyScore();
-            environment_score += underConstruction[i]->getEnvironmentScore();
-            addFacility(underConstruction[i]);
+    for (int i = underConstruction.size() - 1; i >= 0; i--)  {
+        Facility* f=underConstruction[i];
+        f->step();
+        if (f->getTimeLeft() == 0) {
+            life_quality_score += f->getLifeQualityScore();
+            economy_score += f->getEconomyScore();
+            environment_score += f->getEnvironmentScore();
+            facilities.push_back(f);
             underConstruction.erase(underConstruction.begin() + i);
-            this->status= PlanStatus::AVALIABLE;
         }
+       
     }
+    if(underConstruction.size()== settlement.getConstructionLimit())
+        status= PlanStatus::BUSY;
+    else
+        status= PlanStatus::AVALIABLE;
 }
 
 
@@ -126,10 +126,41 @@ const string Plan::toString() const{
  economy_score(other.economy_score), 
  environment_score(other.environment_score){
     for (size_t i = 0; i < other.facilities.size(); i++) {
-        facilities.push_back(other.facilities[i]);
+        Facility* temp = new Facility(other.facilities[i]->getName(), other.facilities[i]->getSettlementName(),
+        other.facilities[i]->getCategory(), other.facilities[i]->getCost(), other.facilities[i]->getLifeQualityScore(), 
+        other.facilities[i]->getEconomyScore(), other.facilities[i]->getEnvironmentScore());
+        facilities.push_back(temp);
     }
     for (size_t i = 0; i < other.underConstruction.size(); i++) {
-        underConstruction.push_back(other.underConstruction[i]);
+        Facility* temp = new Facility(other.underConstruction[i]->getName(), other.underConstruction[i]->getSettlementName(),
+        other.underConstruction[i]->getCategory(), other.underConstruction[i]->getCost(), other.underConstruction[i]->getLifeQualityScore(), 
+        other.underConstruction[i]->getEconomyScore(), other.underConstruction[i]->getEnvironmentScore());  
+        underConstruction.push_back(temp);
+    }
+ }
+
+ Plan::Plan(const Plan& other, const Settlement &settlement): //helper
+ plan_id(other.plan_id),
+ settlement(settlement),
+ selectionPolicy(other.selectionPolicy->clone()), 
+ status(other.status), 
+ facilities(), 
+ underConstruction(), 
+ facilityOptions(other.facilityOptions), 
+ life_quality_score(other.life_quality_score),
+ economy_score(other.economy_score), 
+ environment_score(other.environment_score){
+    for (size_t i = 0; i < other.facilities.size(); i++) {
+        Facility* temp = new Facility(other.facilities[i]->getName(), other.facilities[i]->getSettlementName(),
+        other.facilities[i]->getCategory(), other.facilities[i]->getCost(), other.facilities[i]->getLifeQualityScore(), 
+        other.facilities[i]->getEconomyScore(), other.facilities[i]->getEnvironmentScore());
+        facilities.push_back(temp);
+    }
+    for (size_t i = 0; i < other.underConstruction.size(); i++) {
+        Facility* temp = new Facility(other.underConstruction[i]->getName(), other.underConstruction[i]->getSettlementName(),
+        other.underConstruction[i]->getCategory(), other.underConstruction[i]->getCost(), other.underConstruction[i]->getLifeQualityScore(), 
+        other.underConstruction[i]->getEconomyScore(), other.underConstruction[i]->getEnvironmentScore());  
+        underConstruction.push_back(temp);
     }
  }
 
@@ -147,11 +178,11 @@ const string Plan::toString() const{
     other.selectionPolicy = nullptr;
     for (size_t i = 0; i < other.facilities.size(); i++) {
         facilities.push_back(other.facilities[i]);
-        other.facilities[i] = nullptr;
+        delete other.facilities[i];
     }
     for (size_t i = 0; i < other.underConstruction.size(); i++) {
         underConstruction.push_back(other.underConstruction[i]);
-        other.underConstruction[i] = nullptr;
+        delete other.underConstruction[i];
     }
  }
 
@@ -169,23 +200,6 @@ string Plan::getSP(){
     return selectionPolicy->toString();
 }
 
-int main() {
-    vector<FacilityType> facilities = {
-        FacilityType("Facility1", FacilityCategory::LIFE_QUALITY, 100, 80, 60, 70),
-        FacilityType("Facility2", FacilityCategory::ECONOMY, 200, 60, 90, 50),
-        FacilityType("Facility3", FacilityCategory::ENVIRONMENT, 300, 70, 40, 95)
-    };
-
-    // Create a selection policy
-    SelectionPolicy* selection = new BalancedSelection(70, 70, 70);
-
-    // Select a facility
-    const FacilityType& selectedFacility = selection->selectFacility(facilities);
-
-    // Output the selected facility's name (assuming getName() is implemented)
-    std::cout << "Selected Facility: " << selectedFacility.getName() << std::endl;
-
-    // Clean up
-    delete selection;
-    return 0;
+const Settlement& Plan::getSettlement(){
+    return settlement;
 }
