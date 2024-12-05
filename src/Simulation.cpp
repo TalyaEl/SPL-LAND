@@ -223,26 +223,29 @@ void Simulation::readMe(const string &configFilePath) {
                 while (std::getline(configFile, line)) {
                         vector<string> parsedAr = Auxiliary::parseArguments(line);
 
-                        if (parsedAr.empty()) {
+                        if (parsedAr.empty() || parsedAr[0] == "#") {
                                 continue;
                         }
 
-                        if (parsedAr[0] == "settlement") {
+                        else if (parsedAr[0] == "settlement") {
                                 SettlementType curSetType = stringToSetType(parsedAr[2]);
                                 Settlement* curSet = new Settlement(parsedAr[1], curSetType);
                                 addSettlement(curSet);
                         }
 
-                        if (parsedAr[0] == "facility") {
+                        else if (parsedAr[0] == "facility") {
                                 FacilityCategory curFacCat = stringToFacCat(parsedAr[2]);
                                 FacilityType curFac = FacilityType(parsedAr[1], curFacCat, stoi(parsedAr[3]), stoi(parsedAr[4]), stoi(parsedAr[5]), stoi(parsedAr[6]));
                                 addFacility(curFac);
                         }
 
-                        else {
+                        else if (parsedAr[0] == "plan") {
                                 Settlement* curSet = getSettlement(parsedAr[1]);
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
                                 addPlan(curSet, curSelPol);
+                        }
+                        else {
+                                std::cerr << "Nonvalid data" << endl;
                         }
                 }
         }
@@ -294,23 +297,29 @@ SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) {
         }
 }
 
-Simulation::Simulation(const Simulation& other):
+Simulation::Simulation(const Simulation& other): // change - how to copy plans
 isRunning(other.isRunning),
 planCounter(other.planCounter),
 actionsLog(),
-plans(other.plans),
+plans(),
 settlements(),
 facilitiesOptions(other.facilitiesOptions),
 invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})) {
-        for (BaseAction* action : other.actionsLog) {
-                actionsLog.push_back(action->clone());
-        }
+
         for (Settlement* set : other.settlements) {
                 settlements.push_back(new Settlement(set->getName(), set->getType()));
         }
+
+        for (BaseAction* action : other.actionsLog) {
+                actionsLog.push_back(action->clone());
+        }
+
+        for (Plan p : other.plans) {
+                plans.push_back(p);
+        }
 }
 
-Simulation::Simulation(Simulation&& otherTemp)noexcept:
+Simulation::Simulation(Simulation&& otherTemp) noexcept:
 isRunning(otherTemp.isRunning),
 planCounter(otherTemp.planCounter),
 actionsLog(std::move(otherTemp.actionsLog)),
@@ -336,18 +345,22 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 this->clear();
                 isRunning = other.isRunning;
                 planCounter = other.planCounter;
-                for(Plan p: other.plans){
+
+                for (Settlement* set : other.settlements) { 
+                        settlements.push_back(new Settlement(set->getName(), set->getType()));
+                }
+
+                for(FacilityType fac: other.facilitiesOptions){ 
+                        facilitiesOptions.push_back(fac);
+                }
+
+                for(Plan p: other.plans){ 
                         plans.push_back(p);
                 }
-                for(FacilityType fac: other.facilitiesOptions){
-                        facilitiesOptions.push_back(fac);
-                        }
+
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
-                }
-                for (Settlement* set : other.settlements) {
-                        settlements.push_back(new Settlement(set->getName(), set->getType()));
-                }         
+                }  
         }
 
         return *this;
