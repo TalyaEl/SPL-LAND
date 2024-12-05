@@ -14,6 +14,7 @@ class Plan {
     public:
         Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions);
         Plan(const Plan& other);
+        Plan(const Plan& other, const Settlement &settlement); //copy for backup&restore
         Plan(Plan&& other);
         Plan& operator=(const Plan& other) = delete;
         Plan& operator=(Plan&& other) = delete;
@@ -29,6 +30,7 @@ class Plan {
         void addFacility(Facility* facility);
         const string toString() const;
         string getSP();
+        const Settlement& getSettlement();
 
     private:
         int plan_id;

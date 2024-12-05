@@ -144,6 +144,31 @@ const string Plan::toString() const{
     }
  }
 
+ Plan::Plan(const Plan& other, const Settlement &settlement): //helper
+ plan_id(other.plan_id),
+ settlement(settlement),
+ selectionPolicy(other.selectionPolicy->clone()), 
+ status(other.status), 
+ facilities(), 
+ underConstruction(), 
+ facilityOptions(other.facilityOptions), 
+ life_quality_score(other.life_quality_score),
+ economy_score(other.economy_score), 
+ environment_score(other.environment_score){
+    for (size_t i = 0; i < other.facilities.size(); i++) {
+        Facility* temp = new Facility(other.facilities[i]->getName(), other.facilities[i]->getSettlementName(),
+        other.facilities[i]->getCategory(), other.facilities[i]->getCost(), other.facilities[i]->getLifeQualityScore(), 
+        other.facilities[i]->getEconomyScore(), other.facilities[i]->getEnvironmentScore());
+        facilities.push_back(temp);
+    }
+    for (size_t i = 0; i < other.underConstruction.size(); i++) {
+        Facility* temp = new Facility(other.underConstruction[i]->getName(), other.underConstruction[i]->getSettlementName(),
+        other.underConstruction[i]->getCategory(), other.underConstruction[i]->getCost(), other.underConstruction[i]->getLifeQualityScore(), 
+        other.underConstruction[i]->getEconomyScore(), other.underConstruction[i]->getEnvironmentScore());  
+        underConstruction.push_back(temp);
+    }
+ }
+
  Plan::Plan(Plan&& other): 
  plan_id(other.plan_id), 
  settlement(other.settlement), 
@@ -178,4 +203,8 @@ const string Plan::toString() const{
 
 string Plan::getSP(){
     return selectionPolicy->toString();
+}
+
+const Settlement& Plan::getSettlement(){
+    return settlement;
 }

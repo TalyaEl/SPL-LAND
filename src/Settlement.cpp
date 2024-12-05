@@ -24,12 +24,20 @@ Settlement::Settlement(const string &name , SettlementType type)
 const string &Settlement::getName() const{
    return name;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Talya
 SettlementType Settlement::getType() const{
          return type;
 }
 const string Settlement::toString() const{
          return name+"," + SettlementTypeToString(type);
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Talya
 size_t Settlement::getConstructionLimit() const{
         if(this->getType()==SettlementType::VILLAGE)
             return size_t(1);
@@ -37,4 +45,8 @@ size_t Settlement::getConstructionLimit() const{
             return size_t(2);
         else
             return size_t(3);
+<<<<<<< HEAD
     }
+=======
+}
+>>>>>>> Talya
