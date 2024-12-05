@@ -293,7 +293,7 @@ SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) {
         }
 }
 
-Simulation::Simulation(const Simulation& other): // change - how to copy plans
+Simulation::Simulation(const Simulation& other): 
 isRunning(other.isRunning),
 planCounter(other.planCounter),
 actionsLog(),

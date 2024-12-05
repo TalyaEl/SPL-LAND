@@ -44,6 +44,9 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
             bestFacilityIndex = i;
         }
     }
+    this->LifeQualityScore += facilitiesOptions[bestFacilityIndex].getLifeQualityScore();
+    this->EconomyScore += facilitiesOptions[bestFacilityIndex].getEconomyScore();
+    this->EnvironmentScore += facilitiesOptions[bestFacilityIndex].getEnvironmentScore();
     return facilitiesOptions[bestFacilityIndex];
 }
 

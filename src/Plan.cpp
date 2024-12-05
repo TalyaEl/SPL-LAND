@@ -49,13 +49,13 @@ void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
 
 void Plan::step(){
     if(status == PlanStatus::AVALIABLE){
-    while (underConstruction.size()<settlement.getConstructionLimit()) {
-        std::cout<< "test1"<< endl;
-        FacilityType select= selectionPolicy->selectFacility(facilityOptions);
-        Facility* newFacility= new Facility(select, settlement.getName());
-        underConstruction.push_back(newFacility);
-     
-    }}
+        while (underConstruction.size()<settlement.getConstructionLimit()) {
+            std::cout<< "test1"<< endl;
+            FacilityType select= selectionPolicy->selectFacility(facilityOptions);
+            Facility* newFacility= new Facility(select, settlement.getName());
+            underConstruction.push_back(newFacility);
+        }
+    }
 
     for (int i = underConstruction.size() - 1; i >= 0; i--)  {
         Facility* f=underConstruction[i];
@@ -174,31 +174,25 @@ const string Plan::toString() const{
  settlement(other.settlement), 
  selectionPolicy(other.selectionPolicy->clone()), 
  status(other.status), 
- facilities(), 
- underConstruction(), 
- facilityOptions(other.facilityOptions), 
+ facilities(std::move(other.facilities)), 
+ underConstruction(std::move(other.underConstruction)), 
+ facilityOptions(std::move(other.facilityOptions)), 
  life_quality_score(other.life_quality_score),
  economy_score(other.economy_score), 
  environment_score(other.environment_score){
-    other.selectionPolicy = nullptr;
-    for (size_t i = 0; i < other.facilities.size(); i++) {
-        facilities.push_back(other.facilities[i]);
-        delete other.facilities[i];
-    }
-    for (size_t i = 0; i < other.underConstruction.size(); i++) {
-        underConstruction.push_back(other.underConstruction[i]);
-        delete other.underConstruction[i];
-    }
  }
 
  Plan::~Plan() {
     delete selectionPolicy;
+    selectionPolicy = nullptr;
     for (size_t i = 0; i < facilities.size(); i++) {
         delete facilities[i];
     }
+    facilities.clear();
     for (size_t i = 0; i < underConstruction.size(); i++) {
         delete underConstruction[i];
     }
+    underConstruction.clear();
  }
 
 string Plan::getSP(){
