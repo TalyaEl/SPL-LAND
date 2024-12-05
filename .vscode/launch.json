@@ -5,7 +5,7 @@
           "name": "Linux",
           "type": "cppdbg",
           "request": "launch",
-          "program": "/workspaces/Skeleton/bin/skeleton",
+          "program": "/workspaces/Skeleton/bin/simulation",
           "args": ["config_file.txt"],
           "stopAtEntry": true,
           "cwd": "${workspaceFolder}",

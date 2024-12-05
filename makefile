@@ -2,7 +2,7 @@
 all: clean compile link 
 
 link:
-	g++ -o bin/skeleton bin/main.o bin/Settlement.o bin/Simulation.o \
+	g++ -o bin/simulation bin/main.o bin/Settlement.o bin/Simulation.o \
 	bin/Facility.o bin/Auxiliary.o bin/SelectionPolicy.o bin/Action.o \
 	bin/Plan.o
 
