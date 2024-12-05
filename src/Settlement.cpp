@@ -32,9 +32,9 @@ Settlement::Settlement(const string &name , SettlementType type)
 }
     size_t Settlement::getConstructionLimit() const{
         if(this->getType()==SettlementType::VILLAGE)
-            return 1;
+            return size_t(1);
         if(this->getType()==SettlementType::CITY)
-            return 2;
+            return size_t(2);
         else
-            return 3;
+            return size_t(3);
     }
