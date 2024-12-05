@@ -77,8 +77,8 @@ void AddPlan::act(Simulation &simulation){
     else if(simulation.isSettlementExists(settlementName)==false)
              error("Cannot create this plan");
     else {
-        Settlement *temp= simulation.getSettlement(settlementName);
-        simulation.addPlan(temp,simulation.stringToSelPol(selectionPolicy));
+        Settlement temp= simulation.getSettlement(settlementName);
+        simulation.addPlan(&temp,simulation.stringToSelPol(selectionPolicy));
         complete();
          }
 

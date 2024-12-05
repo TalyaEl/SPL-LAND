@@ -145,13 +145,14 @@ bool Simulation::isSettlementExists(const string &settlementName){
         return false;
 }
 
-Settlement *Simulation::getSettlement(const string &settlementName) {
+Settlement &Simulation::getSettlement(const string &settlementName) {
         for (Settlement* set : settlements) {
                 if (set->getName() == settlementName) { 
-                        return set; 
+                        return *set; 
                 }
         }
-        return nullptr;
+        Settlement* s= new Settlement("NoSuchSettlement",SettlementType::VILLAGE);
+        return *s;
 }
 
 Plan &Simulation::getPlan(const int planID) {
@@ -238,9 +239,9 @@ void Simulation::readMe(const string &configFilePath) {
                         }
 
                         else if (parsedAr[0] == "plan") {
-                                Settlement* curSet = getSettlement(parsedAr[1]);
+                                Settlement curSet = getSettlement(parsedAr[1]);
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
-                                addPlan(curSet, curSelPol);
+                                addPlan(&curSet, curSelPol);
                         }
                         else {
                                 std::cerr << "Invalid data" << endl;
@@ -310,8 +311,8 @@ invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), ne
 
         plans.clear();
         for (Plan p : other.plans) {
-                Settlement* tempSet = getSettlement(p.getSettlement().getName());
-                Plan temp=Plan(p, *tempSet);
+                Settlement tempSet = getSettlement(p.getSettlement().getName());
+                Plan temp=Plan(p, tempSet);
                 plans.push_back(temp);
         }
 
@@ -360,7 +361,7 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 }
 
                 for (const Plan &p: other.plans){ 
-                        plans.push_back(Plan(p, *getSettlement(p.getSettlement().getName())));
+                        plans.push_back(Plan(p, getSettlement(p.getSettlement().getName())));
                 }
         }
 
