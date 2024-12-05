@@ -1,6 +1,8 @@
 #include "Facility.h"
+#include <iostream>
 using std::string;
 using std::vector;
+
 
 string facilityStatusToString(FacilityStatus t){
     if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)
@@ -62,8 +64,10 @@ const int Facility::getTimeLeft() const{
 
 FacilityStatus Facility::step(){
     timeLeft--;
+     std::cout<< "test8"<< std::endl;
     if (getTimeLeft() == 0) {
-        status = FacilityStatus::OPERATIONAL;
+        std::cout<< "test10000000"<< std::endl;
+        setStatus(FacilityStatus::OPERATIONAL);
     }
     return status;
 }
