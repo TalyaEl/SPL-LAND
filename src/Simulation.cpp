@@ -100,7 +100,7 @@ void Simulation::start(){
         }
         
         else
-                cout<< "invalid input"<< endl;
+                cout << "invalid input"<< endl;
      }
 }
 
@@ -145,13 +145,9 @@ bool Simulation::isSettlementExists(const string &settlementName){
 }
 
 Settlement *Simulation::getSettlement(const string &settlementName) {
-        if (!isSettlementExists(settlementName))
-                return nullptr;
-        else {
-                for (Settlement* set : settlements) {
-                        if (set->getName() == settlementName) { 
-                                return set; 
-                        }
+        for (Settlement* set : settlements) {
+                if (set->getName() == settlementName) { 
+                        return set; 
                 }
         }
         return nullptr;
@@ -166,7 +162,7 @@ Plan &Simulation::getPlan(const int planID) {
 }
 
 void Simulation::step(){
-        for (Plan p : plans) {
+        for (Plan &p : plans) {
                 p.step();
         }
 }
@@ -245,7 +241,7 @@ void Simulation::readMe(const string &configFilePath) {
                                 addPlan(curSet, curSelPol);
                         }
                         else {
-                                std::cerr << "Nonvalid data" << endl;
+                                std::cerr << "Invalid data" << endl;
                         }
                 }
         }
@@ -304,18 +300,19 @@ actionsLog(),
 plans(),
 settlements(),
 facilitiesOptions(other.facilitiesOptions),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})) {
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection, {})) {
 
         for (Settlement* set : other.settlements) {
                 settlements.push_back(new Settlement(set->getName(), set->getType()));
         }
 
-        for (BaseAction* action : other.actionsLog) {
-                actionsLog.push_back(action->clone());
+        for (Plan p : other.plans) {
+                Settlement* tempSet = getSettlement(p.getSettlement().getName());
+                plans.push_back(Plan(p, *tempSet));
         }
 
-        for (Plan p : other.plans) {
-                plans.push_back(p);
+        for (BaseAction* action : other.actionsLog) {
+                actionsLog.push_back(action->clone());
         }
 }
 
@@ -326,7 +323,7 @@ actionsLog(std::move(otherTemp.actionsLog)),
 plans(std::move(otherTemp.plans)),
 settlements(std::move(otherTemp.settlements)),
 facilitiesOptions(std::move(otherTemp.facilitiesOptions)),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), nullptr, {})){}
+invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection, {})){}
 
 void Simulation::clear() {
         for (BaseAction* action : actionsLog) {
@@ -355,7 +352,8 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 }
 
                 for(Plan p: other.plans){ 
-                        plans.push_back(p);
+                        Settlement* tempSet = getSettlement(p.getSettlement().getName());
+                        plans.push_back(Plan(p, *tempSet));
                 }
 
                 for (BaseAction* action : other.actionsLog) {

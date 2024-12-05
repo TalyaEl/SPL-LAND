@@ -4,8 +4,10 @@
 #include "Simulation.h"
 #include <iostream>
 #include "SelectionPolicy.h"
+
 using std::cout;
 using std::endl;
+extern Simulation* backup;
 
 enum class SettlementType;
 enum class FacilityCategory;
@@ -236,9 +238,13 @@ const string Close::toString() const{
 //backup simulation
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
-    extern Simulation* backup;
-    backup = &simulation; //copy constructor
-    complete();
+    if (backup == nullptr) {
+        backup = new Simulation(simulation);
+    }
+    else {
+        *backup = simulation;
+        complete();
+    }
 }
 
 BackupSimulation *BackupSimulation::clone() const{
@@ -252,8 +258,7 @@ const string BackupSimulation::toString() const{
 //restore simulation
 RestoreSimulation::RestoreSimulation():BaseAction(){}
 void RestoreSimulation::act(Simulation &simulation){
-    extern Simulation* backup;
-    if (backup== nullptr)
+    if (backup == nullptr)
     {
        error("No backup available");
     }

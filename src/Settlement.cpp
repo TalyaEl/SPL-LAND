@@ -24,28 +24,19 @@ Settlement::Settlement(const string &name , SettlementType type)
 const string &Settlement::getName() const{
    return name;
 }
-<<<<<<< HEAD
-    SettlementType Settlement::getType() const{
-         return type;
-}
-    const string Settlement::toString() const{
-         return name+"," + SettlementTypeToString(type);
-}
-    size_t Settlement::getConstructionLimit() const{
-        if(this->getType()==SettlementType::VILLAGE)
-            return 1;
-        if(this->getType()==SettlementType::CITY)
-            return 2;
-        else
-            return 3;
-    }
-=======
 
 SettlementType Settlement::getType() const{
-    return type;
-}    
-
-const string Settlement::toString() const{
-    return name+"," + SettlementTypeToString(type);
+         return type;
 }
->>>>>>> Talya
+const string Settlement::toString() const{
+         return name+"," + SettlementTypeToString(type);
+}
+
+size_t Settlement::getConstructionLimit() const{
+        if(this->getType()==SettlementType::VILLAGE)
+            return size_t(1);
+        if(this->getType()==SettlementType::CITY)
+            return size_t(2);
+        else
+            return size_t(3);
+}
