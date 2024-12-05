@@ -237,7 +237,7 @@ const string Close::toString() const{
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
     extern Simulation* backup;
-    backup = &simulation;
+    backup = &simulation; //copy constructor
     complete();
 }
 
@@ -252,7 +252,7 @@ const string BackupSimulation::toString() const{
 //restore simulation
 RestoreSimulation::RestoreSimulation():BaseAction(){}
 void RestoreSimulation::act(Simulation &simulation){
-extern Simulation* backup;
+    extern Simulation* backup;
     if (backup== nullptr)
     {
        error("No backup available");

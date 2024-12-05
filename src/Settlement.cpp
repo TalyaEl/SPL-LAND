@@ -21,9 +21,10 @@ string SettlementTypeToString(SettlementType type){ //helper
 Settlement::Settlement(const string &name , SettlementType type)
         :name(name), type(type){}
 
-    const  string &Settlement::getName() const{
-        return name;
+const string &Settlement::getName() const{
+   return name;
 }
+<<<<<<< HEAD
     SettlementType Settlement::getType() const{
          return type;
 }
@@ -38,3 +39,13 @@ Settlement::Settlement(const string &name , SettlementType type)
         else
             return size_t(3);
     }
+=======
+
+SettlementType Settlement::getType() const{
+    return type;
+}    
+
+const string Settlement::toString() const{
+    return name+"," + SettlementTypeToString(type);
+}
+>>>>>>> Talya
