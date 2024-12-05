@@ -43,14 +43,12 @@ const int Plan::getEnvironmentScore() const{
 }
 
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
-    delete selectionPolicy;
     this->selectionPolicy = selectionPolicy->clone();
 }
 
 void Plan::step(){
     if(status == PlanStatus::AVALIABLE){
     while (underConstruction.size()<settlement.getConstructionLimit()) {
-        std::cout<< "test1"<< endl;
         FacilityType select= selectionPolicy->selectFacility(facilityOptions);
         Facility* newFacility= new Facility(select, settlement.getName());
         underConstruction.push_back(newFacility);
@@ -59,10 +57,8 @@ void Plan::step(){
 
     for (int i = underConstruction.size() - 1; i >= 0; i--)  {
         Facility* f=underConstruction[i];
-        std::cout<< "test2"<< endl;
         f->step();
         if (f->getTimeLeft() == 0) {
-             std::cout<< "test4"<< endl;
             life_quality_score += f->getLifeQualityScore();
             economy_score += f->getEconomyScore();
             environment_score += f->getEnvironmentScore();
@@ -71,7 +67,6 @@ void Plan::step(){
         }
        
     }
-     std::cout<< "test5"<< endl;
     if(underConstruction.size()== settlement.getConstructionLimit())
         status= PlanStatus::BUSY;
     else

@@ -52,7 +52,7 @@ const string BalancedSelection::toString() const {
 }
 
 BalancedSelection* BalancedSelection::clone() const {
-    return new BalancedSelection(*this);
+    return new BalancedSelection(LifeQualityScore,EconomyScore,EnvironmentScore);
 }
 
 // Economy Selection
@@ -71,7 +71,7 @@ const string EconomySelection::toString() const {
 }
 
 EconomySelection* EconomySelection::clone() const {
-    return new EconomySelection(*this);
+    return new EconomySelection();
 }
 
 // Sustainability Selection
@@ -90,5 +90,5 @@ const string SustainabilitySelection::toString() const {
 }
 
 SustainabilitySelection* SustainabilitySelection::clone() const {
-    return new SustainabilitySelection(*this);
+    return new SustainabilitySelection();
 }

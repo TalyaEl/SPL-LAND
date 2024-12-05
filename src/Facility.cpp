@@ -64,9 +64,7 @@ const int Facility::getTimeLeft() const{
 
 FacilityStatus Facility::step(){
     timeLeft--;
-     std::cout<< "test8"<< std::endl;
     if (getTimeLeft() == 0) {
-        std::cout<< "test10000000"<< std::endl;
         setStatus(FacilityStatus::OPERATIONAL);
     }
     return status;

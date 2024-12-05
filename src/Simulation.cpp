@@ -154,11 +154,11 @@ Settlement *Simulation::getSettlement(const string &settlementName) {
 }
 
 Plan &Simulation::getPlan(const int planID) {
-    if (planID < 0 || static_cast<size_t>(planID) >= plans.size()) {
+    if (planID < 0 || (size_t)(planID) >= plans.size()) {
          return invalidPlan;
     }
     else     
-        return plans[static_cast<size_t>(planID)];
+        return plans[(size_t)planID];
 }
 
 void Simulation::step(){
