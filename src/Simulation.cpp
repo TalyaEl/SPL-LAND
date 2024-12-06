@@ -79,12 +79,9 @@ void Simulation::start(){
                 }
 
                 if (parsedAr[0] == "plan") {
-                        if (parsedAr[2]!= "null")
-                        {
                         AddPlan plan = AddPlan(parsedAr[1], parsedAr[2]);
                         plan.act(*this);
-                        actionsLog.push_back(plan.clone());
-                        }   
+                        actionsLog.push_back(plan.clone());  
                 }
 
                 if (parsedAr[0] == "step") {
@@ -98,7 +95,6 @@ void Simulation::start(){
                         actionsLog.push_back(fac.clone());
                 }
         }
-        
         else
                 cout << "invalid input"<< endl;
      }
