@@ -238,7 +238,7 @@ void Simulation::readMe(const string &configFilePath) {
                         }
 
                         else if (parsedAr[0] == "plan") {
-                                Settlement curSet = getSettlement(parsedAr[1]);
+                                Settlement& curSet = getSettlement(parsedAr[1]);
                                 Settlement* pset= &curSet;
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
                                 addPlan(pset, curSelPol);

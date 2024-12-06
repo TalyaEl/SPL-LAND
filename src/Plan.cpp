@@ -44,6 +44,7 @@ const int Plan::getEnvironmentScore() const{
 
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
     this->selectionPolicy = selectionPolicy->clone();
+    delete selectionPolicy;
     
 }
 
