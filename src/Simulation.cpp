@@ -108,7 +108,6 @@ void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectio
      Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);
      plans.push_back(p);
      planCounter++;
-     delete selectionPolicy;
 }
 
 void Simulation::addAction(BaseAction *action){
@@ -240,8 +239,9 @@ void Simulation::readMe(const string &configFilePath) {
 
                         else if (parsedAr[0] == "plan") {
                                 Settlement curSet = getSettlement(parsedAr[1]);
+                                Settlement* pset= &curSet;
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
-                                addPlan(&curSet, curSelPol);
+                                addPlan(pset, curSelPol);
                         }
                         else {
                                 std::cerr << "Invalid data" << endl;
@@ -341,6 +341,13 @@ void Simulation::clear() {
         }     
         settlements.clear();         
 }
+Simulation::~Simulation() {
+        clear();
+        for(FacilityType f: facilitiesOptions)
+                delete &f;
+        facilitiesOptions.clear();
+}
+
 
 Simulation& Simulation::operator=(const Simulation& other) {
         if (this != &other) {
@@ -382,11 +389,4 @@ Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
         return *this;        
 }
 
-Simulation::~Simulation() {
-        clear();
-        for(FacilityType f: facilitiesOptions)
-                delete &f;
-        facilitiesOptions.clear();
-        
-}
 

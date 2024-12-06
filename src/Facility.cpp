@@ -71,7 +71,7 @@ FacilityStatus Facility::step(){
 }
 
 void Facility::setStatus(FacilityStatus status){
-   status=status;
+   this->status=status;
 }
 
 const FacilityStatus& Facility::getStatus() const{
