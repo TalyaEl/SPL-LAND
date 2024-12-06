@@ -15,6 +15,8 @@ using std::stoi;
 using std::cout;
 using std::endl;
 
+extern Simulation* backup; 
+
 class BaseAction;
 class SelectionPolicy;
 
@@ -24,8 +26,8 @@ planCounter(0),
 actionsLog(),
 plans(),
 settlements(),
-facilitiesOptions(),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection(), {})){
+facilitiesOptions()
+{
         readMe(configFilePath);
 }
 
@@ -49,9 +51,9 @@ void Simulation::start(){
                 }
 
                 if (parsedAr[0] == "backup") {
-                        BackupSimulation back = BackupSimulation();
-                        back.act(*this);
-                        actionsLog.push_back(back.clone());
+                        BackupSimulation* back = new BackupSimulation();
+                        back->act(*this);
+                        actionsLog.push_back(back);
                 }
 
                 if (parsedAr[0] == "restore") {
@@ -100,8 +102,8 @@ void Simulation::start(){
      }
 }
 
-void Simulation::addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy){
-     Plan p(planCounter, *settlement, selectionPolicy->clone(), this->facilitiesOptions);
+void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy){
+     Plan p(planCounter, settlement, selectionPolicy, this->facilitiesOptions);
      plans.push_back(p);
      planCounter++;
 }
@@ -151,10 +153,6 @@ Settlement &Simulation::getSettlement(const string &settlementName) {
 }
 
 Plan &Simulation::getPlan(const int planID) {
-    if (planID < 0 || (size_t)(planID) >= plans.size()) {
-         return invalidPlan;
-    }
-    else     
         return plans[(size_t)planID];
 }
 
@@ -169,7 +167,6 @@ void Simulation::close(){
         for (Plan p : plans) {
                 cout << p.toString() << endl;
         }
-        delete this;
 }
 
 void Simulation::open(){
@@ -235,9 +232,9 @@ void Simulation::readMe(const string &configFilePath) {
 
                         else if (parsedAr[0] == "plan") {
                                 Settlement& curSet = getSettlement(parsedAr[1]);
-                                Settlement* pset= &curSet;
                                 SelectionPolicy* curSelPol = stringToSelPol(parsedAr[2]);
-                                addPlan(pset, curSelPol);
+                                addPlan(curSet, curSelPol);
+                                delete curSelPol;
                         }
                         else {
                                 std::cerr << "Invalid data" << endl;
@@ -296,22 +293,18 @@ Simulation::Simulation(const Simulation& other):
 isRunning(other.isRunning),
 planCounter(other.planCounter),
 actionsLog(),
-plans(),
+plans(other.plans),
 settlements(),
-facilitiesOptions(other.facilitiesOptions),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection, {})) {
+facilitiesOptions(other.facilitiesOptions){
 
         for (Settlement* set : other.settlements) {
                 settlements.push_back(new Settlement(set->getName(), set->getType()));
         }
-
-        plans.clear();
-        for (Plan p : other.plans) {
-                Settlement tempSet = getSettlement(p.getSettlement().getName());
-                Plan temp=Plan(p, tempSet);
-                plans.push_back(temp);
-        }
-
+        // for (Plan p : other.plans) {
+        //          Settlement tempSet = p.getSettlement();
+        //          plans.push_back(Plan(p, tempSet));
+               
+       // }
         for (BaseAction* action : other.actionsLog) {
                 actionsLog.push_back(action->clone());
         }
@@ -323,10 +316,10 @@ planCounter(otherTemp.planCounter),
 actionsLog(std::move(otherTemp.actionsLog)),
 plans(std::move(otherTemp.plans)),
 settlements(std::move(otherTemp.settlements)),
-facilitiesOptions(std::move(otherTemp.facilitiesOptions)),
-invalidPlan(Plan(-1, Settlement("noSuchSettlement", SettlementType::VILLAGE), new NaiveSelection, {})){}
+facilitiesOptions(std::move(otherTemp.facilitiesOptions)){}
 
 void Simulation::clear() {
+        const Settlement* sett = &backup->plans[0].getSettlement();
         for (BaseAction* action : actionsLog) {
                 delete action;
         } 
@@ -339,17 +332,16 @@ void Simulation::clear() {
 }
 Simulation::~Simulation() {
         clear();
-        for(FacilityType f: facilitiesOptions)
-                delete &f;
-        facilitiesOptions.clear();
 }
 
 
 Simulation& Simulation::operator=(const Simulation& other) {
         if (this != &other) {
                 this->clear();
-                isRunning = other.isRunning;
-                planCounter = other.planCounter;
+                this->plans.clear();
+                this->facilitiesOptions.clear();
+                this->isRunning = other.isRunning;
+                this->planCounter = other.planCounter;
 
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
@@ -363,8 +355,8 @@ Simulation& Simulation::operator=(const Simulation& other) {
                         facilitiesOptions.push_back(fac);
                 }
 
-                for (const Plan &p: other.plans){ 
-                        plans.push_back(Plan(p, p.getSettlement()));
+                for (Plan p: other.plans){ 
+                        plans.push_back(p);
                 }
         }
 

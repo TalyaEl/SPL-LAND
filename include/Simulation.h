@@ -20,7 +20,7 @@ class Simulation {
         ~Simulation();
 
         void start();
-        void addPlan(const Settlement *settlement, SelectionPolicy *selectionPolicy);
+        void addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy);
         void addAction(BaseAction *action);
         bool addSettlement(Settlement *settlement);
         bool addFacility(FacilityType facility);
@@ -52,6 +52,6 @@ class Simulation {
         vector<Settlement*> settlements;
         vector<FacilityType> facilitiesOptions;
 
-        Plan invalidPlan;
+      
 
 };

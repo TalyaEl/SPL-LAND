@@ -78,8 +78,9 @@ void AddPlan::act(Simulation &simulation){
              error("Cannot create this plan");
     else {
         Settlement& temp= simulation.getSettlement(settlementName);
-        Settlement* pset= &temp;
-        simulation.addPlan(pset,simulation.stringToSelPol(selectionPolicy));
+        SelectionPolicy* tempSelP=simulation.stringToSelPol(selectionPolicy);
+        simulation.addPlan(temp,tempSelP);
+        delete tempSelP;
         complete();
          }
 
@@ -160,8 +161,8 @@ BaseAction(), planId(planId)
 {}
 
 void PrintPlanStatus::act(Simulation &simulation){
-    if(simulation.isPlanID(planId)==false)
-        error("Plan doesn't exist");
+    if ( planId<0 || planId > simulation.getPlanCounter()){
+        error("Plan doesn't exist");}
     else{
         simulation.getPlan(planId).printStatus();
         complete();
@@ -188,7 +189,9 @@ void ChangePlanPolicy::act(Simulation &simulation){
         error("Cannot change selection policy");
     else{
         string temp= simulation.getPlan(planId).getSP();
-        simulation.getPlan(planId).setSelectionPolicy(simulation.stringToSelPol(newPolicy));
+        SelectionPolicy* tempP=simulation.stringToSelPol(newPolicy);
+        simulation.getPlan(planId).setSelectionPolicy(tempP);
+        delete tempP;
         complete();
         cout<< "PlanId: " << std::to_string(planId) << endl;
         cout<< "previousPolicy: " << temp << endl;
@@ -240,10 +243,13 @@ const string Close::toString() const{
 //backup simulation
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
- 
-    delete backup;
-    backup=nullptr;
-    backup = new Simulation(simulation);
+    if(backup == nullptr)
+         backup = new Simulation(simulation);
+    else{
+         delete backup;
+         backup=nullptr;
+         backup = new Simulation(simulation);
+         }
     complete();
 }
 

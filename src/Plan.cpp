@@ -43,9 +43,9 @@ const int Plan::getEnvironmentScore() const{
 }
 
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
-    this->selectionPolicy = selectionPolicy->clone();
-    delete selectionPolicy;
-    
+    if (this->selectionPolicy!= nullptr)
+        delete this->selectionPolicy;
+    this->selectionPolicy = selectionPolicy->clone();    
 }
 
 void Plan::step(){
@@ -143,7 +143,7 @@ const string Plan::toString() const{
 
  Plan::Plan(const Plan& other, const Settlement &settlement): //helper
  plan_id(other.plan_id),
- settlement(settlement),
+ settlement(other.settlement),
  selectionPolicy(other.selectionPolicy->clone()), 
  status(other.status), 
  facilities(), 
@@ -169,7 +169,7 @@ const string Plan::toString() const{
  Plan::Plan(Plan&& other): 
  plan_id(other.plan_id), 
  settlement(other.settlement), 
- selectionPolicy(other.selectionPolicy->clone()), 
+ selectionPolicy(other.selectionPolicy), 
  status(other.status), 
  facilities(std::move(other.facilities)), 
  underConstruction(std::move(other.underConstruction)), 
@@ -177,10 +177,11 @@ const string Plan::toString() const{
  life_quality_score(other.life_quality_score),
  economy_score(other.economy_score), 
  environment_score(other.environment_score){ 
+    other.selectionPolicy=nullptr;
  }
 
  Plan::~Plan() {
-    
+    delete selectionPolicy;
     for (size_t i = 0; i < facilities.size(); i++) {
         delete facilities[i];
     }
@@ -189,7 +190,7 @@ const string Plan::toString() const{
         delete underConstruction[i];
     }
     underConstruction.clear();
-    delete selectionPolicy;
+    
 
  }
 
