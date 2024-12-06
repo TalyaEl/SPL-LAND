@@ -368,7 +368,7 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 }
 
                 for (const Plan &p: other.plans){ 
-                        plans.push_back(Plan(p, getSettlement(p.getSettlement().getName())));
+                        plans.push_back(Plan(p, p.getSettlement()));
                 }
         }
 
