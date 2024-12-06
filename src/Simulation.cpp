@@ -103,6 +103,7 @@ void Simulation::start(){
 }
 
 void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy){
+//      Settlement tempSet = Settlement(settlement.getName(), settlement.getType());  
      Plan p(planCounter, settlement, selectionPolicy, this->facilitiesOptions);
      plans.push_back(p);
      planCounter++;
@@ -298,13 +299,9 @@ settlements(),
 facilitiesOptions(other.facilitiesOptions){
 
         for (Settlement* set : other.settlements) {
-                settlements.push_back(new Settlement(set->getName(), set->getType()));
+                settlements.push_back(new Settlement(*set));
         }
-        // for (Plan p : other.plans) {
-        //          Settlement tempSet = p.getSettlement();
-        //          plans.push_back(Plan(p, tempSet));
-               
-       // }
+
         for (BaseAction* action : other.actionsLog) {
                 actionsLog.push_back(action->clone());
         }
@@ -319,7 +316,6 @@ settlements(std::move(otherTemp.settlements)),
 facilitiesOptions(std::move(otherTemp.facilitiesOptions)){}
 
 void Simulation::clear() {
-        const Settlement* sett = &backup->plans[0].getSettlement();
         for (BaseAction* action : actionsLog) {
                 delete action;
         } 
@@ -342,13 +338,13 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 this->facilitiesOptions.clear();
                 this->isRunning = other.isRunning;
                 this->planCounter = other.planCounter;
-
+        
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
                 } 
 
                 for (const Settlement* set : other.settlements) { 
-                        settlements.push_back(new Settlement(set->getName(), set->getType()));
+                        settlements.push_back(new Settlement(*set));
                 }
 
                 for (FacilityType fac: other.facilitiesOptions){ 
