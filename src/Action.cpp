@@ -162,7 +162,7 @@ BaseAction(), planId(planId)
 {}
 
 void PrintPlanStatus::act(Simulation &simulation){
-    if ( planId<0 || planId > simulation.getPlanCounter()){
+    if ( planId<0 || planId > simulation.getPlanCounter()-1){
         error("Plan doesn't exist");}
     else{
         simulation.getPlan(planId).printStatus();
