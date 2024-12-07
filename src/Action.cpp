@@ -138,6 +138,7 @@ void AddFacility::act(Simulation &simulation){
     else{
         FacilityType* temp = new FacilityType(facilityName,facilityCategory, price,lifeQualityScore,economyScore,environmentScore);
         simulation.addFacility(*temp);
+        delete temp;
         complete();
     }
 
@@ -243,13 +244,7 @@ const string Close::toString() const{
 //backup simulation
 BackupSimulation::BackupSimulation(): BaseAction(){}
 void BackupSimulation::act(Simulation &simulation){
-    if(backup == nullptr)
-         backup = new Simulation(simulation);
-    else{
-         delete backup;
-         backup=nullptr;
-         backup = new Simulation(simulation);
-         }
+    simulation.backupAct();
     complete();
 }
 
@@ -269,9 +264,9 @@ void RestoreSimulation::act(Simulation &simulation){
        error("No backup available");
     }
     else{
-        simulation = *backup;
-        complete();
-    }
+        simulation.restore();
+          complete();
+}
 }
 
 RestoreSimulation *RestoreSimulation::clone() const{

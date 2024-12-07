@@ -105,7 +105,7 @@ void Simulation::start(){
 void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy){
 //      Settlement tempSet = Settlement(settlement.getName(), settlement.getType());  
      Plan p(planCounter, settlement, selectionPolicy, this->facilitiesOptions);
-     plans.push_back(p);
+     plans.emplace_back(p);
      planCounter++;
 }
 
@@ -294,17 +294,21 @@ Simulation::Simulation(const Simulation& other):
 isRunning(other.isRunning),
 planCounter(other.planCounter),
 actionsLog(),
-plans(other.plans),
+plans(),
 settlements(),
 facilitiesOptions(other.facilitiesOptions){
 
-        for (Settlement* set : other.settlements) {
+        for (const Settlement* set : other.settlements) {
                 settlements.push_back(new Settlement(*set));
         }
 
         for (BaseAction* action : other.actionsLog) {
                 actionsLog.push_back(action->clone());
         }
+        for(const Plan& p: other.plans){
+                plans.emplace_back(p, (this->getSettlement(p.getSettlement().getName())));
+        }
+
 }
 
 Simulation::Simulation(Simulation&& otherTemp) noexcept:
@@ -315,7 +319,8 @@ plans(std::move(otherTemp.plans)),
 settlements(std::move(otherTemp.settlements)),
 facilitiesOptions(std::move(otherTemp.facilitiesOptions)){}
 
-void Simulation::clear() {
+
+Simulation::~Simulation() {
         for (BaseAction* action : actionsLog) {
                 delete action;
         } 
@@ -324,20 +329,28 @@ void Simulation::clear() {
         for (Settlement* set : settlements) {
                 delete set;
         }     
-        settlements.clear();         
-}
-Simulation::~Simulation() {
-        clear();
+        settlements.clear();   
+        facilitiesOptions.clear();
+        plans.clear();
 }
 
 
 Simulation& Simulation::operator=(const Simulation& other) {
         if (this != &other) {
-                this->clear();
-                this->plans.clear();
-                this->facilitiesOptions.clear();
-                this->isRunning = other.isRunning;
-                this->planCounter = other.planCounter;
+                for (BaseAction* action : actionsLog) {
+                     delete action;
+                  } 
+                actionsLog.clear();  
+
+                plans.clear();
+                for (Settlement* set : settlements) {
+                     delete set;
+                }     
+                settlements.clear();   
+                
+                facilitiesOptions.clear();
+                isRunning = other.isRunning;
+                planCounter = other.planCounter;
         
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
@@ -351,8 +364,8 @@ Simulation& Simulation::operator=(const Simulation& other) {
                         facilitiesOptions.push_back(fac);
                 }
 
-                for (Plan p: other.plans){ 
-                        plans.push_back(p);
+                for(const Plan& p: other.plans){
+                plans.emplace_back(p, (this->getSettlement(p.getSettlement().getName())));
                 }
         }
 
@@ -361,7 +374,15 @@ Simulation& Simulation::operator=(const Simulation& other) {
 
 Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
         if (this != &otherTemp) {
-                this->clear();
+                for (BaseAction* action : actionsLog) {
+                     delete action;
+                  } 
+                actionsLog.clear();  
+
+                 for (Settlement* set : settlements) {
+                     delete set;
+                  }     
+                settlements.clear(); 
                 isRunning = otherTemp.isRunning;
                 planCounter = otherTemp.planCounter;
                 actionsLog = std::move(otherTemp.actionsLog);
@@ -373,4 +394,15 @@ Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
         return *this;        
 }
 
+void Simulation::backupAct() {
+        if (backup != nullptr) {
+                delete backup;
+        }
+        backup = new Simulation(*this);
+}
 
+void Simulation::restore() {
+        if (backup != nullptr) {
+                *this = *backup;
+}
+}

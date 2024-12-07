@@ -143,7 +143,7 @@ const string Plan::toString() const{
 
  Plan::Plan(const Plan& other, const Settlement &settlement): //helper
  plan_id(other.plan_id),
- settlement(other.settlement),
+ settlement(settlement),
  selectionPolicy(other.selectionPolicy->clone()), 
  status(other.status), 
  facilities(), 

@@ -42,7 +42,8 @@ class Simulation {
         SettlementType stringToSetType(const string &settlementType);
         FacilityCategory stringToFacCat(const string &facilityCategory);
         SelectionPolicy* stringToSelPol(const string &selectionPolicy);
-        void clear();
+        void backupAct();
+        void restore();
 
     private:
         bool isRunning;
