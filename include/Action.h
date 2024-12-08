@@ -21,8 +21,8 @@ class BaseAction{
 
     protected:
         void complete();
-        void error(string errorMsg);
-        const string &getErrorMsg() const;
+        void error(string errorMsg); // Logs an error message to standard output
+        const string &getErrorMsg() const; //Returns the last error message
 
     private:
         string errorMsg;
@@ -43,7 +43,7 @@ class SimulateStep : public BaseAction {
 class AddPlan : public BaseAction {
     public:
         AddPlan(const string &settlementName, const string &selectionPolicy);
-        void act(Simulation &simulation) override; //add the plan to the simulation
+        void act(Simulation &simulation) override; 
         const string toString() const override;
         AddPlan *clone() const override;
     private:
@@ -55,7 +55,7 @@ class AddPlan : public BaseAction {
 class AddSettlement : public BaseAction {
     public:
         AddSettlement(const string &settlementName,SettlementType settlementType);
-        void act(Simulation &simulation) override; //don't forget error massege like the instructions
+        void act(Simulation &simulation) override; 
         AddSettlement *clone() const override;
         const string toString() const override;
     private:

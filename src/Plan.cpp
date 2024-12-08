@@ -18,7 +18,6 @@ string PlanStatusToString(PlanStatus t){
         return "BUSY";
 }
 
-
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions)
 :plan_id(planId),
 settlement(settlement),
@@ -43,24 +42,25 @@ const int Plan::getEnvironmentScore() const{
 }
 
 void Plan::setSelectionPolicy(SelectionPolicy *selectionPolicy){
-    if (this->selectionPolicy!= nullptr)
-        delete this->selectionPolicy;
+    if (this->selectionPolicy != nullptr)
+        delete this->selectionPolicy; //
+
     this->selectionPolicy = selectionPolicy->clone();    
 }
 
 void Plan::step(){
-    if(status == PlanStatus::AVALIABLE){
-    while (underConstruction.size()<settlement.getConstructionLimit()) {
-        FacilityType select= selectionPolicy->selectFacility(facilityOptions);
-        Facility* newFacility= new Facility(select, settlement.getName());
-        underConstruction.push_back(newFacility);
-     
-    }}
+    if(status == PlanStatus::AVALIABLE){ //If the plan is available, fill till construction limit
+        while (underConstruction.size() < settlement.getConstructionLimit()) {
+            FacilityType select = selectionPolicy->selectFacility(facilityOptions);
+            Facility* newFacility = new Facility(select, settlement.getName());
+            underConstruction.push_back(newFacility);
+        }
+    }
 
-    for (int i = underConstruction.size() - 1; i >= 0; i--)  {
-        Facility* f=underConstruction[i];
+    for (int i = underConstruction.size() - 1; i >= 0; i--)  { //update each facility under construction
+        Facility* f = underConstruction[i];
         f->step();
-        if (f->getTimeLeft() == 0) {
+        if (f->getTimeLeft() == 0) { //if construction is complete, update scores
             life_quality_score += f->getLifeQualityScore();
             economy_score += f->getEconomyScore();
             environment_score += f->getEnvironmentScore();
@@ -69,12 +69,12 @@ void Plan::step(){
         }
        
     }
-    if(underConstruction.size()== settlement.getConstructionLimit())
-        status= PlanStatus::BUSY;
-    else
-        status= PlanStatus::AVALIABLE;
-}
 
+    if(underConstruction.size() == settlement.getConstructionLimit()) //update plan status for the next step
+        status = PlanStatus::BUSY;
+    else
+        status = PlanStatus::AVALIABLE;
+}
 
 void Plan::printStatus(){
     cout << "PlanID:" << plan_id << endl;
@@ -89,6 +89,7 @@ void Plan::printStatus(){
         cout << "FacilityName:" << f->getName() << endl;
         cout << "FacilityStatus: OPERATIONAL" << endl;
     }
+
     for(Facility* f: underConstruction){
         cout << "FacilityName:" << f->getName() << endl;
         cout << "FacilityStatus: UNDER_CONSTRUCTION" << endl;
@@ -116,7 +117,7 @@ const string Plan::toString() const{
     return oss.str();
 }
 
- Plan::Plan(const Plan& other): 
+ Plan::Plan(const Plan& other): //copy constructor
  plan_id(other.plan_id), 
  settlement(other.settlement), 
  selectionPolicy(other.selectionPolicy->clone()), 
@@ -127,12 +128,14 @@ const string Plan::toString() const{
  life_quality_score(other.life_quality_score),
  economy_score(other.economy_score), 
  environment_score(other.environment_score){
+    // Deep copy operational facilities
     for (size_t i = 0; i < other.facilities.size(); i++) {
         Facility* temp = new Facility(other.facilities[i]->getName(), other.facilities[i]->getSettlementName(),
         other.facilities[i]->getCategory(), other.facilities[i]->getCost(), other.facilities[i]->getLifeQualityScore(), 
         other.facilities[i]->getEconomyScore(), other.facilities[i]->getEnvironmentScore());
         facilities.push_back(temp);
     }
+    // Deep copy facilities under construction
     for (size_t i = 0; i < other.underConstruction.size(); i++) {
         Facility* temp = new Facility(other.underConstruction[i]->getName(), other.underConstruction[i]->getSettlementName(),
         other.underConstruction[i]->getCategory(), other.underConstruction[i]->getCost(), other.underConstruction[i]->getLifeQualityScore(), 
@@ -141,7 +144,7 @@ const string Plan::toString() const{
     }
  }
 
- Plan::Plan(const Plan& other, const Settlement &settlement): //helper
+ Plan::Plan(const Plan& other, const Settlement &settlement): //helper copy constructor
  plan_id(other.plan_id),
  settlement(settlement),
  selectionPolicy(other.selectionPolicy->clone()), 
@@ -152,12 +155,14 @@ const string Plan::toString() const{
  life_quality_score(other.life_quality_score),
  economy_score(other.economy_score), 
  environment_score(other.environment_score){
+    // Deep copy operational facilities
     for (size_t i = 0; i < other.facilities.size(); i++) {
         Facility* temp = new Facility(other.facilities[i]->getName(), other.facilities[i]->getSettlementName(),
         other.facilities[i]->getCategory(), other.facilities[i]->getCost(), other.facilities[i]->getLifeQualityScore(), 
         other.facilities[i]->getEconomyScore(), other.facilities[i]->getEnvironmentScore());
         facilities.push_back(temp);
     }
+    // Deep copy facilities under construction
     for (size_t i = 0; i < other.underConstruction.size(); i++) {
         Facility* temp = new Facility(other.underConstruction[i]->getName(), other.underConstruction[i]->getSettlementName(),
         other.underConstruction[i]->getCategory(), other.underConstruction[i]->getCost(), other.underConstruction[i]->getLifeQualityScore(), 
@@ -166,7 +171,7 @@ const string Plan::toString() const{
     }
  }
 
- Plan::Plan(Plan&& other): 
+ Plan::Plan(Plan&& other):  // Move constructor
  plan_id(other.plan_id), 
  settlement(other.settlement), 
  selectionPolicy(other.selectionPolicy), 
@@ -177,24 +182,24 @@ const string Plan::toString() const{
  life_quality_score(other.life_quality_score),
  economy_score(other.economy_score), 
  environment_score(other.environment_score){ 
-    other.selectionPolicy=nullptr;
+    other.selectionPolicy = nullptr;
  }
 
- Plan::~Plan() {
-    delete selectionPolicy;
+ Plan::~Plan() { //Destructor 
+    delete selectionPolicy; // Deallocate selection policy
+
     for (size_t i = 0; i < facilities.size(); i++) {
         delete facilities[i];
     }
     facilities.clear();
+
     for (size_t i = 0; i < underConstruction.size(); i++) {
         delete underConstruction[i];
     }
     underConstruction.clear();
-    
-
  }
 
-string Plan::getSP(){
+string Plan::getSP(){ //get selection policy to string
     return selectionPolicy->toString();
 }
 

@@ -1,10 +1,10 @@
 #include "Facility.h"
 #include <iostream>
+
 using std::string;
 using std::vector;
 
-
-string facilityStatusToString(FacilityStatus t){
+string facilityStatusToString(FacilityStatus t){ //helper
     if (t == FacilityStatus:: UNDER_CONSTRUCTIONS)
         return "UNDER_CONSTRUCTIONS";
     else
@@ -55,7 +55,7 @@ Facility::Facility(const FacilityType &type, const string &settlementName)
 {}
 
 const string &Facility::getSettlementName() const{
-    return  settlementName;
+    return settlementName;
 }
 
 const int Facility::getTimeLeft() const{
@@ -71,7 +71,7 @@ FacilityStatus Facility::step(){
 }
 
 void Facility::setStatus(FacilityStatus status){
-   this->status=status;
+   this->status = status;
 }
 
 const FacilityStatus& Facility::getStatus() const{
@@ -79,5 +79,5 @@ const FacilityStatus& Facility::getStatus() const{
 }
 
 const string Facility::toString() const{
-    return getName()+", "+facilityStatusToString(status);
+    return getName() + ", " + facilityStatusToString(status);
 }

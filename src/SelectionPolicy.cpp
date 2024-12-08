@@ -31,22 +31,26 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
     int minDifference = std::numeric_limits<int>::max();
     size_t bestFacilityIndex = 0;
 
-    for (size_t i = 0; i < facilitiesOptions.size(); i++) {
+    for (size_t i = 0; i < facilitiesOptions.size(); i++) { // evaluate each facility for balance in scores
         const FacilityType& currentType = facilitiesOptions[i];
+        //temporary scores
         int tempLifeQ = this->LifeQualityScore + currentType.getLifeQualityScore();
         int tempEconomy = this->EconomyScore + currentType.getEconomyScore();
         int tempEnvironment = this->EnvironmentScore + currentType.getEnvironmentScore();
+
         int maxScore = std::max({tempLifeQ, tempEconomy,tempEnvironment});
         int minScore = std::min({tempLifeQ, tempEconomy,tempEnvironment});
         
-        if ((maxScore - minScore) < minDifference) {
+        if ((maxScore - minScore) < minDifference) { //update best facility if the balance is better
             minDifference = maxScore - minScore;
             bestFacilityIndex = i;
         }
     }
+    //update scores with the chosen facility's scores
     this->LifeQualityScore += facilitiesOptions[bestFacilityIndex].getLifeQualityScore();
     this->EconomyScore += facilitiesOptions[bestFacilityIndex].getEconomyScore();
     this->EnvironmentScore += facilitiesOptions[bestFacilityIndex].getEnvironmentScore();
+
     return facilitiesOptions[bestFacilityIndex];
 }
 
@@ -63,9 +67,11 @@ EconomySelection::EconomySelection(): lastSelectedIndex(-1) {}
 
 const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>& facilitiesOptions){
     lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
+
     while (facilitiesOptions[lastSelectedIndex].getCategory() != FacilityCategory::ECONOMY){
         lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
     }
+
     return facilitiesOptions[lastSelectedIndex];
 }
 
@@ -82,9 +88,11 @@ SustainabilitySelection::SustainabilitySelection(): lastSelectedIndex(-1) {}
 
 const FacilityType& SustainabilitySelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
     lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
+
     while (facilitiesOptions[lastSelectedIndex].getCategory() != FacilityCategory::ENVIRONMENT){
         lastSelectedIndex = (lastSelectedIndex + 1) % facilitiesOptions.size();
     }
+
     return facilitiesOptions[lastSelectedIndex];
 }
 

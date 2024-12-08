@@ -16,9 +16,6 @@ compile:
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Simulation.o src/Simulation.cpp -Iinclude
 	g++ -g -Wall -Weffc++ -std=c++11 -c -o bin/Action.o src/Action.cpp -Iinclude
 
-fornow:
-	g++ -o main bin/main.o
-
 clean:
 	rm -f bin/*
 # Customize this file to define how to build your project.

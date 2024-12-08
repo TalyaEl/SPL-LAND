@@ -14,27 +14,29 @@ string SettlementTypeToString(SettlementType type){ //helper
         case SettlementType:: METROPOLIS:
             return "METROPOLIS";
         default:
-            return "UNKNOWN";
+            return "UNKNOWN"; //for unrecognized types
     }
 }
 
-Settlement::Settlement(const string &name , SettlementType type)
-        :name(name), type(type){}
+Settlement::Settlement(const string &name , SettlementType type): name(name), type(type){}
 
 const string &Settlement::getName() const{
    return name;
 }
+
 SettlementType Settlement::getType() const{
-         return type;
+    return type;
 }
+
 const string Settlement::toString() const{
-         return name+"," + SettlementTypeToString(type);
+         return name + "," + SettlementTypeToString(type);
 }
+
 size_t Settlement::getConstructionLimit() const{
-        if(this->getType()==SettlementType::VILLAGE)
+        if (this->getType() == SettlementType::VILLAGE)
             return size_t(1);
-        if(this->getType()==SettlementType::CITY)
+        if (this->getType() == SettlementType::CITY)
             return size_t(2);
         else
             return size_t(3);
-    }
+}

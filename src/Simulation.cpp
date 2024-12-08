@@ -26,18 +26,18 @@ planCounter(0),
 actionsLog(),
 plans(),
 settlements(),
-facilitiesOptions()
-{
-        readMe(configFilePath);
+facilitiesOptions() {
+        readMe(configFilePath); //using helper function
 }
 
 void Simulation::start(){
      open();
      while (isRunning){
         string userInput;
-        std::getline(std::cin, userInput);
+        std::getline(std::cin, userInput); // Get user input
         if(!userInput.empty()){
-                vector<string> parsedAr = Auxiliary::parseArguments(userInput);
+                vector<string> parsedAr = Auxiliary::parseArguments(userInput); // Parse the input into arguments
+                // Handle different commands based on user input
                 if (parsedAr[0] == "close") {
                         Close closeSim =  Close();
                         closeSim.act(*this);
@@ -98,58 +98,64 @@ void Simulation::start(){
                 }
         }
         else
-                cout << "invalid input"<< endl;
+                cout << "invalid input"<< endl; //empty input
      }
 }
 
-void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy){
-//      Settlement tempSet = Settlement(settlement.getName(), settlement.getType());  
+void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy) {
      Plan p(planCounter, settlement, selectionPolicy, this->facilitiesOptions);
      plans.emplace_back(p);
      planCounter++;
 }
 
-void Simulation::addAction(BaseAction *action){
+void Simulation::addAction(BaseAction *action) {
      actionsLog.push_back(action);
 }
 
-bool Simulation::addSettlement(Settlement *settlement){
+bool Simulation::addSettlement(Settlement *settlement) {
+        // Check if a settlement with the same name already exists
         for (Settlement* set : settlements) {
                 if (set->getName() == settlement->getName()) {
                         return false;
                 }
         }
+
         settlements.push_back(settlement);
         return true;
 }
 
-bool Simulation::addFacility(FacilityType facility){
+bool Simulation::addFacility(FacilityType facility) {
+        // Check if a facility with the same name already exists
         for (FacilityType type : facilitiesOptions) {
                 if (type.getName() == facility.getName()) {
                         return false;
                 }
         }
+
         facilitiesOptions.push_back(facility);
         return true;
 }
 
-bool Simulation::isSettlementExists(const string &settlementName){
-
+bool Simulation::isSettlementExists(const string &settlementName) {
+        // Search through settlements for a match
         for (Settlement* set : settlements) {
                 if (set->getName() == settlementName) {
                         return true;
                 }
-        }        
+        }    
+
         return false;
 }
 
 Settlement &Simulation::getSettlement(const string &settlementName) {
+        // Search for the settlement by name
         for (Settlement* set : settlements) {
                 if (set->getName() == settlementName) { 
                         return *set; 
                 }
         }
-        Settlement* s= new Settlement("NoSuchSettlement",SettlementType::VILLAGE);
+        // If not found, create a placeholder settlement
+        Settlement* s = new Settlement("NoSuchSettlement",SettlementType::VILLAGE);
         return *s;
 }
 
@@ -157,25 +163,25 @@ Plan &Simulation::getPlan(const int planID) {
         return plans[(size_t)planID];
 }
 
-void Simulation::step(){
+void Simulation::step() {
         for (Plan &p : plans) {
-                p.step();
+                p.step(); //step on each plan
         }
 }
 
-void Simulation::close(){
+void Simulation::close() {
         isRunning = false;
         for (Plan p : plans) {
-                cout << p.toString() << endl;
+                cout << p.toString() << endl; //print final status of each plan
         }
 }
 
-void Simulation::open(){
+void Simulation::open() {
         isRunning = true;
         std::cout << "The simulation has started"  << std::endl;
 }
 
-int Simulation::getPlanCounter(){
+int Simulation::getPlanCounter() {
         return planCounter;
 }
 
@@ -183,38 +189,40 @@ vector<FacilityType> &Simulation::getfacilitiesOptions(){
         return facilitiesOptions;
 }
 
-bool Simulation::isFacilityExists(const string &FacilityName){
+bool Simulation::isFacilityExists(const string &FacilityName) {
+        // Search through facilities options for a match
         for (const FacilityType facility : facilitiesOptions) {
                 if (facility.getName() == FacilityName) {
                         return true;
                 }
         }
+
         return false;
 }
 
-bool Simulation::isPlanID(int planID) {
-        if(planID < planCounter && planID >= 0)
+bool Simulation::isPlanID(int planID) { //checks if plan id is valid
+        if (planID < planCounter && planID >= 0)
                 return true;
         return false;
 }
 
-const vector<BaseAction*> Simulation::getActionLog(){
-        return  actionsLog;
+const vector<BaseAction*> Simulation::getActionLog() {
+        return actionsLog;
 }
 
-void Simulation::readMe(const string &configFilePath) {
-        std::ifstream configFile(configFilePath);
+void Simulation::readMe(const string &configFilePath) { //helper
+        std::ifstream configFile(configFilePath); // Open the configuration file
         string line;
         
         if (!configFile.is_open()) {
                 std::cerr << "Error: Could not open the config file: " << configFilePath << endl;
-                return;
+                return; // Exit if the config file cannot be opened
         }
         
         else {
-                while (std::getline(configFile, line)) {
-                        vector<string> parsedAr = Auxiliary::parseArguments(line);
-
+                while (std::getline(configFile, line)) { // Read each line from the file
+                        vector<string> parsedAr = Auxiliary::parseArguments(line); // Parse the line into arguments
+                        // Ignore empty lines or comments
                         if (parsedAr.empty() || parsedAr[0] == "#") {
                                 continue;
                         }
@@ -237,6 +245,7 @@ void Simulation::readMe(const string &configFilePath) {
                                 addPlan(curSet, curSelPol);
                                 delete curSelPol;
                         }
+
                         else {
                                 std::cerr << "Invalid data" << endl;
                         }
@@ -244,7 +253,7 @@ void Simulation::readMe(const string &configFilePath) {
         }
 }
 
-SettlementType Simulation::stringToSetType(const string &settlementType) {
+SettlementType Simulation::stringToSetType(const string &settlementType) { //helper
         if (settlementType == "0") {
                 return SettlementType::VILLAGE;
         }
@@ -258,7 +267,7 @@ SettlementType Simulation::stringToSetType(const string &settlementType) {
         }
 }
 
-FacilityCategory Simulation::stringToFacCat(const string &facilityCategory) {
+FacilityCategory Simulation::stringToFacCat(const string &facilityCategory) { //helper
         if (facilityCategory == "0") {
                 return FacilityCategory::LIFE_QUALITY;
         }
@@ -272,7 +281,7 @@ FacilityCategory Simulation::stringToFacCat(const string &facilityCategory) {
         }
 }
 
-SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) {
+SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) { //helper
         if (selectionPolicy == "nve") {
                 return new NaiveSelection();
         }
@@ -290,7 +299,7 @@ SelectionPolicy* Simulation::stringToSelPol(const string &selectionPolicy) {
         }
 }
 
-Simulation::Simulation(const Simulation& other): 
+Simulation::Simulation(const Simulation& other): //copy constructor 
 isRunning(other.isRunning),
 planCounter(other.planCounter),
 actionsLog(),
@@ -306,21 +315,21 @@ facilitiesOptions(other.facilitiesOptions){
                 actionsLog.push_back(action->clone());
         }
         for(const Plan& p: other.plans){
+                // Copy each plan with associated settlement
                 plans.emplace_back(p, (this->getSettlement(p.getSettlement().getName())));
         }
-
 }
 
-Simulation::Simulation(Simulation&& otherTemp) noexcept:
+Simulation::Simulation(Simulation&& otherTemp) noexcept: //move constructor
 isRunning(otherTemp.isRunning),
 planCounter(otherTemp.planCounter),
 actionsLog(std::move(otherTemp.actionsLog)),
 plans(std::move(otherTemp.plans)),
 settlements(std::move(otherTemp.settlements)),
-facilitiesOptions(std::move(otherTemp.facilitiesOptions)){}
+facilitiesOptions(std::move(otherTemp.facilitiesOptions)) {}
 
 
-Simulation::~Simulation() {
+Simulation::~Simulation() { //destructor
         for (BaseAction* action : actionsLog) {
                 delete action;
         } 
@@ -329,17 +338,19 @@ Simulation::~Simulation() {
         for (Settlement* set : settlements) {
                 delete set;
         }     
-        settlements.clear();   
+        settlements.clear(); 
+         
         facilitiesOptions.clear();
         plans.clear();
 }
 
 
-Simulation& Simulation::operator=(const Simulation& other) {
-        if (this != &other) {
+Simulation& Simulation::operator=(const Simulation& other) { //assignment opertor
+        if (this != &other) { // Avoid self-assignment
+                // Clear existing resources
                 for (BaseAction* action : actionsLog) {
                      delete action;
-                  } 
+                } 
                 actionsLog.clear();  
 
                 plans.clear();
@@ -351,7 +362,7 @@ Simulation& Simulation::operator=(const Simulation& other) {
                 facilitiesOptions.clear();
                 isRunning = other.isRunning;
                 planCounter = other.planCounter;
-        
+
                 for (BaseAction* action : other.actionsLog) {
                         actionsLog.push_back(action->clone());
                 } 
@@ -360,29 +371,33 @@ Simulation& Simulation::operator=(const Simulation& other) {
                         settlements.push_back(new Settlement(*set));
                 }
 
-                for (FacilityType fac: other.facilitiesOptions){ 
+                for (FacilityType fac: other.facilitiesOptions) { 
                         facilitiesOptions.push_back(fac);
                 }
 
-                for(const Plan& p: other.plans){
-                plans.emplace_back(p, (this->getSettlement(p.getSettlement().getName())));
+                for(const Plan& p: other.plans) {
+                        plans.emplace_back(p, (this->getSettlement(p.getSettlement().getName())));
                 }
         }
 
         return *this;
 }
 
-Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
-        if (this != &otherTemp) {
+Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept { //move assignment operator
+        if (this != &otherTemp) { // Avoid self-assignment
+                // Clear existing resources
                 for (BaseAction* action : actionsLog) {
                      delete action;
-                  } 
+                } 
                 actionsLog.clear();  
 
-                 for (Settlement* set : settlements) {
+                for (Settlement* set : settlements) {
                      delete set;
-                  }     
-                settlements.clear(); 
+                }     
+                settlements.clear();
+                facilitiesOptions.clear();
+                plans.clear();
+
                 isRunning = otherTemp.isRunning;
                 planCounter = otherTemp.planCounter;
                 actionsLog = std::move(otherTemp.actionsLog);
@@ -396,13 +411,13 @@ Simulation& Simulation::operator=(Simulation&& otherTemp)noexcept {
 
 void Simulation::backupAct() {
         if (backup != nullptr) {
-                delete backup;
+                delete backup; // Cleanup any existing backup
         }
-        backup = new Simulation(*this);
+        backup = new Simulation(*this); // Create a new backup of the current state
 }
 
 void Simulation::restore() {
         if (backup != nullptr) {
-                *this = *backup;
-}
+                *this = *backup; // Restore the current instance to the backed-up state
+        }
 }

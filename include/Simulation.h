@@ -13,6 +13,7 @@ class SelectionPolicy;
 class Simulation {
     public:
         Simulation(const string &configFilePath);
+        //rule of 5
         Simulation(const Simulation& other);
         Simulation(Simulation&& otherTemp) noexcept;
         Simulation& operator=(const Simulation& other);
@@ -31,12 +32,12 @@ class Simulation {
         void close();
         void open();
         
+        //helpers:
         int getPlanCounter();
         vector<FacilityType> &getfacilitiesOptions();
         bool isFacilityExists(const string &FacilityName);
         bool isPlanID(int planID);
         const vector<BaseAction*> getActionLog();
-      
 
         void readMe(const string &configFilePath);
         SettlementType stringToSetType(const string &settlementType);
